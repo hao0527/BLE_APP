@@ -235,7 +235,7 @@ uint16_t co_list_size(struct co_list *list);
  * @return true if the list is empty, false else otherwise.
  ****************************************************************************************
  */
-__INLINE bool co_list_is_empty(const struct co_list *const list)
+static __INLINE bool co_list_is_empty(const struct co_list *const list)
 {
     bool listempty;
     listempty = (list->first == NULL);
@@ -251,7 +251,7 @@ __INLINE bool co_list_is_empty(const struct co_list *const list)
  * @return First element address. Returns NULL pointer if the list is empty.
  ****************************************************************************************
  */
-__INLINE struct co_list_hdr *co_list_pick(const struct co_list *const list)
+static __INLINE struct co_list_hdr *co_list_pick(const struct co_list *const list)
 {
     return(list->first);
 }

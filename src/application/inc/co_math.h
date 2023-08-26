@@ -19,7 +19,7 @@
 #include <stdint.h>        // standard integer definitions
 #include <stdbool.h>       // boolean definitions
 #include <stdlib.h>        // standard library
-#include "compiler.h"      // for __INLINE
+#include "compiler.h"      // for static __INLINE
 
 
 
@@ -93,7 +93,7 @@ extern int rand (void);
  * @return Number of leading zeros when value is written as 32 bits.
  ****************************************************************************************
  */
-__INLINE uint32_t co_clz(uint32_t val)
+static __INLINE uint32_t co_clz(uint32_t val)
 {
     #if defined(__arm__)
     return __builtin_clz(val);
@@ -120,7 +120,7 @@ __INLINE uint32_t co_clz(uint32_t val)
  * @param[in] seed The seed number to use to generate the random sequence.
  ****************************************************************************************
  */
-__INLINE void co_random_init(uint32_t seed)
+static __INLINE void co_random_init(uint32_t seed)
 {
     srand(seed);
 }
@@ -131,7 +131,7 @@ __INLINE void co_random_init(uint32_t seed)
  * @return Random byte value.
  ****************************************************************************************
  */
-__INLINE uint8_t co_rand_byte(void)
+static __INLINE uint8_t co_rand_byte(void)
 {
     return (uint8_t)(rand() & 0xFF);
 }
@@ -142,7 +142,7 @@ __INLINE uint8_t co_rand_byte(void)
  * @return Random half word value.
  ****************************************************************************************
  */
-__INLINE uint16_t co_rand_hword(void)
+static __INLINE uint16_t co_rand_hword(void)
 {
     return (uint16_t)(rand() & 0xFFFF);
 }
@@ -153,7 +153,7 @@ __INLINE uint16_t co_rand_hword(void)
  * @return Random word value.
  ****************************************************************************************
  */
-__INLINE uint32_t co_rand_word(void)
+static __INLINE uint32_t co_rand_word(void)
 {
     return (uint32_t)rand();
 }
@@ -164,7 +164,7 @@ __INLINE uint32_t co_rand_word(void)
  * @return The smallest value.
  ****************************************************************************************
  */
-__INLINE uint32_t co_min(uint32_t a, uint32_t b)
+static __INLINE uint32_t co_min(uint32_t a, uint32_t b)
 {
     return a < b ? a : b;
 }
@@ -175,7 +175,7 @@ __INLINE uint32_t co_min(uint32_t a, uint32_t b)
  * @return The greatest value.
  ****************************************************************************************
  */
-__INLINE uint32_t co_max(uint32_t a, uint32_t b)
+static __INLINE uint32_t co_max(uint32_t a, uint32_t b)
 {
     return a > b ? a : b;
 }
@@ -186,7 +186,7 @@ __INLINE uint32_t co_max(uint32_t a, uint32_t b)
  * @return The absolute value.
  ****************************************************************************************
  */
-__INLINE int co_abs(int val)
+static __INLINE int co_abs(int val)
 {
     return val < 0 ? val*(-1) : val;
 }

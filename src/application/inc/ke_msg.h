@@ -101,7 +101,7 @@ enum ke_msg_status_tag
  * @return The pointer to the ke_msg
  ****************************************************************************************
  */
-__INLINE struct ke_msg * ke_param2msg(void const *param_ptr)
+static __INLINE struct ke_msg * ke_param2msg(void const *param_ptr)
 {
     return (struct ke_msg*) (((uint8_t*)param_ptr) - offsetof(struct ke_msg, param));
 }
@@ -115,7 +115,7 @@ __INLINE struct ke_msg * ke_param2msg(void const *param_ptr)
  * @return The pointer to the param member
  ****************************************************************************************
  */
-__INLINE void * ke_msg2param(struct ke_msg const *msg)
+static __INLINE void * ke_msg2param(struct ke_msg const *msg)
 {
     return (void*) (((uint8_t*) msg) + offsetof(struct ke_msg, param));
 }

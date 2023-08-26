@@ -10,13 +10,13 @@
 ******************************** Local functions ********************************
 ********************************                  *******************************/
 
- inline uint16_t m_get_packet_buffer_index(const packet_buffer_t * p_buffer, const packet_buffer_packet_t * p_packet)
+static inline uint16_t m_get_packet_buffer_index(const packet_buffer_t * p_buffer, const packet_buffer_packet_t * p_packet)
 {
     return (uint16_t)((const uint8_t *)p_packet - p_buffer->buffer);
 }
 
 
- inline packet_buffer_packet_t * m_get_packet(const packet_buffer_t * p_buffer, uint16_t index)
+static inline packet_buffer_packet_t * m_get_packet(const packet_buffer_t * p_buffer, uint16_t index)
 {
     return (packet_buffer_packet_t *) &p_buffer->buffer[index];
 }

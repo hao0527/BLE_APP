@@ -243,7 +243,7 @@ __INLINE void co_write8(void const *ptr8, uint32_t value)
  * @return The 16 bits value.
  ****************************************************************************************
  */
-__INLINE uint16_t co_read16p(void const *ptr16)
+static __INLINE uint16_t co_read16p(void const *ptr16)
 {
     uint16_t value = ((uint8_t *)ptr16)[0] | ((uint8_t *)ptr16)[1] << 8;
     return value;
@@ -256,7 +256,7 @@ __INLINE uint16_t co_read16p(void const *ptr16)
  * @return The 32 bits value.
  ****************************************************************************************
  */
-__INLINE uint32_t co_read32p(void const *ptr32)
+static __INLINE uint32_t co_read32p(void const *ptr32)
 {
     uint16_t addr_l, addr_h;
     addr_l = co_read16p((uint16_t *)ptr32);
@@ -288,7 +288,7 @@ __INLINE void co_write32p(void const *ptr32, uint32_t value)
  * @param[in] value The value to write.
  ****************************************************************************************
  */
-__INLINE void co_write16p(void const *ptr16, uint16_t value)
+static __INLINE void co_write16p(void const *ptr16, uint16_t value)
 {
     uint8_t *ptr=(uint8_t*)ptr16;
 

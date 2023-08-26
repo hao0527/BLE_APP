@@ -1626,7 +1626,7 @@ __INLINE uint8_t ble_extwkupdsb_getf(void)
     return ((localVal & ((uint32_t)0x80000000)) >> 31);
 }
 
-__INLINE void ble_extwkupdsb_setf(uint8_t extwkupdsb)
+static __INLINE void ble_extwkupdsb_setf(uint8_t extwkupdsb)
 {
     ASSERT_ERR((((uint32_t)extwkupdsb << 31) & ~((uint32_t)0x80000000)) == 0);
     REG_BLE_WR(BLE_DEEPSLCNTL_ADDR, (REG_BLE_RD(BLE_DEEPSLCNTL_ADDR) & ~((uint32_t)0x80000000)) | ((uint32_t)extwkupdsb << 31));

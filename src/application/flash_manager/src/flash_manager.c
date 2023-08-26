@@ -77,7 +77,7 @@ fm_result_t result;
 * Static functions
 ******************************************************************************/
 
- inline void schedule_processing(void)
+static inline void schedule_processing(void)
 {
     bearer_event_flag_set(m_processing_flag);
     //bearer_event_handler();
@@ -90,7 +90,7 @@ fm_result_t result;
  *
  * @returns Pointer to packet buffer containing the given action.
  */
- inline packet_buffer_packet_t * get_packet_buffer(const action_t * p_action)
+static inline packet_buffer_packet_t * get_packet_buffer(const action_t * p_action)
 {
     MESH_ASSERT(p_action >= (action_t *) &m_action_queue_buffer[0] &&
                     p_action <= (action_t *) &m_action_queue_buffer[ACTION_QUEUE_BUFFER_LENGTH]);
@@ -103,7 +103,7 @@ fm_result_t result;
  *
  * @returns Pointer to action containing the given entry.
  */
- inline action_t * get_entry_action(const fm_entry_t * p_entry)
+static inline action_t * get_entry_action(const fm_entry_t * p_entry)
 {
     MESH_ASSERT(p_entry >= (fm_entry_t *) &m_action_queue_buffer[0] &&
                     p_entry <= (fm_entry_t *) &m_action_queue_buffer[ACTION_QUEUE_BUFFER_LENGTH]);
@@ -126,7 +126,7 @@ fm_result_t result;
     }
 }
 
- inline void commit_action_buffer(action_t * p_action)
+static inline void commit_action_buffer(action_t * p_action)
 {
     packet_buffer_packet_t * p_buffer = get_packet_buffer(p_action);
     packet_buffer_commit(&m_action_queue, p_buffer, p_buffer->size);
@@ -175,7 +175,7 @@ const void * get_defrag_threshold(const flash_manager_t * p_manager)
     return true;
 }
 
- inline bool metadata_is_valid(const flash_manager_metadata_t * p_metadata)
+static inline bool metadata_is_valid(const flash_manager_metadata_t * p_metadata)
 {
     return (p_metadata->metadata_len != 0xFF &&
             p_metadata->metadata_len >= 8 &&

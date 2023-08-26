@@ -15,7 +15,7 @@
     return (void *) ((uint8_t *) p_queue->p_elem_array + (index * p_queue->elem_size));
 }
 
- inline uint8_t stage_get_available(const msq_t * p_queue, uint8_t stage)
+static inline uint8_t stage_get_available(const msq_t * p_queue, uint8_t stage)
 {
     if (stage == 0)
     {
