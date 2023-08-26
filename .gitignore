@@ -1,0 +1,7 @@
+/keil_projects/*
+/keil_projects/*/Out
+/keil_projects/*/JLink*
+/keil_projects/*/*.uvgui.*
+/keil_projects/*/*.uvguix.*
+
+!/keil_projects/proj_template
