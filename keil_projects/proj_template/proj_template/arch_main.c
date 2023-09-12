@@ -42,6 +42,9 @@
 #include "ota_server.h"
 #endif
 
+// user include
+#include "mcu_hal.h"
+
 const app_info_t app_info __attribute__((at(APP_INFO_ADDR)))=
 {
 	.co_default_bdname = "proj_template",
@@ -158,6 +161,8 @@ void ble_stack_process()
             // Checks for sleep have to be done with interrupt disabled
             GLOBAL_INT_RESTORE();
         }
+
+		mcu_adc_main();
     }
 }
 
@@ -176,10 +181,17 @@ void ble_init(void)
     }
 }
 
+void user_init(void)
+{
+	mcu_gpio_user_init();
+	mcu_adc_user_init();
+}
+
 int main(void)
 {
 	stack_sp_restore();
     ble_init();
+	user_init();
     ble_stack_process();
 }
 

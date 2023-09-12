@@ -1,7 +1,22 @@
 #include "mcu_hal.h"
 #include "adc.h"
 
-////////////////////////////////////////////配置adc/////////////////////////////////////////////
+#define ARRAY_NUM(arr)		(sizeof(arr)/sizeof((arr)[0]))
+
+
+////////////////////////////////////////////gpio_user/////////////////////////////////////////////
+void mcu_gpio_user_init(void)
+{
+	// gpio init
+	GPIO_PullUp(P1, BIT3, GPIO_PULLUP_ENABLE);
+	GPIO_ENABLE_DIGITAL_PATH(P1, BIT3);
+	SYS->P1_MFP &= ~(SYS_MFP_P13_Msk);
+	SYS->P1_MFP |= SYS_MFP_P13_GPIO;
+	GPIO_InitOutput(P1, BIT3, GPIO_HIGH_LEVEL);		// ldo en 拉高
+}
+
+
+////////////////////////////////////////////adc_driver/////////////////////////////////////////////
 static uint8 mcuAdcTableNum = 0;
 static MCU_ADC_TAB * p_mcuAdcTable = NULL;
 static volatile uint16 mcuAdcUserChIdx = 0;	// 当前采集点的Table索引信息，p_mcuAdcTable[mcuAdcUserChIdx]
@@ -129,6 +144,30 @@ void mcu_adc_isr(void)
 		mcu_adc_start_channel_convert(p_mcuAdcTable[mcuAdcUserChIdx].adcChannel);
 		// mcuAdcOverTimeStamp = tim_get_count();
 	}
+}
+
+
+////////////////////////////////////////////adc_user/////////////////////////////////////////////
+#define MCU_AVDD_CFG 3.3
+MCU_ADC_TAB adcTable[] = {
+	{ADC_CH01, 100, MCU_AVDD_CFG/4096},
+	{ADC_CH02, 100, MCU_AVDD_CFG/4096},
+};
+
+void mcu_adc_user_init(void)
+{
+	// gpio init
+	GPIO_SetMode(P1, BIT0, GPIO_MODE_INPUT);
+	GPIO_SetMode(P1, BIT2, GPIO_MODE_INPUT);
+	GPIO_PullUp(P1, BIT0, GPIO_PULLUP_DISABLE);
+	GPIO_PullUp(P1, BIT2, GPIO_PULLUP_DISABLE);
+	GPIO_DISABLE_DIGITAL_PATH(P1, BIT0);
+	GPIO_DISABLE_DIGITAL_PATH(P1, BIT2);
+	SYS->P1_MFP &= ~(SYS_MFP_P10_Msk|SYS_MFP_P12_Msk);
+	SYS->P1_MFP |= SYS_MFP_P10_ADC_CH1|SYS_MFP_P12_ADC_CH2;
+
+	// adc init
+	mcu_adc_init(adcTable, ARRAY_NUM(adcTable));
 }
 
 void ADC_IRQHandler(void)
