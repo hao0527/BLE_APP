@@ -1,5 +1,6 @@
 #include "mcu_hal.h"
 #include "adc.h"
+#include "stack_svc_api.h"
 
 #define ARRAY_NUM(arr)		(sizeof(arr)/sizeof((arr)[0]))
 
@@ -12,7 +13,8 @@ void mcu_gpio_user_init(void)
 	GPIO_ENABLE_DIGITAL_PATH(P1, BIT3);
 	SYS->P1_MFP &= ~(SYS_MFP_P13_Msk);
 	SYS->P1_MFP |= SYS_MFP_P13_GPIO;
-	GPIO_InitOutput(P1, BIT3, GPIO_HIGH_LEVEL);		// ldo en 拉高
+	GPIO_InitOutput(P1, BIT3, GPIO_HIGH_LEVEL);
+	GPIO_SetBits(P1, BIT3);	// ldo en 拉高
 }
 
 
@@ -59,6 +61,9 @@ void mcu_adc_init(MCU_ADC_TAB *p_table, uint8 tableNum)
 	mcuAdcUserChIdx = 0;
 	mcu_adc_start_channel_convert(p_mcuAdcTable[mcuAdcUserChIdx].adcChannel);
 	// mcuAdcOverTimeStamp = tim_get_count();
+	
+	// 注册中断处理函数到协议栈，否则中断会卡死。
+	((interrupt_register_handler)SVC_interrupt_register)(ADC_IRQ, mcu_adc_isr);
 }
 
 /***********************************************************************************************
@@ -168,9 +173,4 @@ void mcu_adc_user_init(void)
 
 	// adc init
 	mcu_adc_init(adcTable, ARRAY_NUM(adcTable));
-}
-
-void ADC_IRQHandler(void)
-{
-	mcu_adc_isr();
 }
