@@ -61,9 +61,6 @@ void mcu_adc_init(MCU_ADC_TAB *p_table, uint8 tableNum)
 	mcuAdcUserChIdx = 0;
 	mcu_adc_start_channel_convert(p_mcuAdcTable[mcuAdcUserChIdx].adcChannel);
 	// mcuAdcOverTimeStamp = tim_get_count();
-	
-	// 注册中断处理函数到协议栈，否则中断会卡死。
-	((interrupt_register_handler)SVC_interrupt_register)(ADC_IRQ, mcu_adc_isr);
 }
 
 /***********************************************************************************************
@@ -171,6 +168,9 @@ void mcu_adc_user_init(void)
 	SYS->P1_MFP &= ~(SYS_MFP_P10_Msk|SYS_MFP_P12_Msk);
 	SYS->P1_MFP |= SYS_MFP_P10_ADC_CH1|SYS_MFP_P12_ADC_CH2;
 
+	// 注册中断处理函数到协议栈，否则中断会卡死。
+	((interrupt_register_handler)SVC_interrupt_register)(ADC_IRQ, mcu_adc_isr);
+	
 	// adc init
 	mcu_adc_init(adcTable, ARRAY_NUM(adcTable));
 }
