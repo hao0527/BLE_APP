@@ -93,15 +93,15 @@ void UART0_Handler(void)
 void sys_clear_global_var(void)
 {
 	memset((uint8_t *)&app_env,0,sizeof( struct app_env_tag));
-    memset((uint8_t *)&gattm_env,0,sizeof( struct gattm_env_tag));
-    memset((uint8_t *)&hci_env,0,sizeof( struct hci_env_tag));
-    memset((uint8_t *)&prf_env,0,sizeof( struct prf_env_tag));
+	memset((uint8_t *)&gattm_env,0,sizeof( struct gattm_env_tag));
+	memset((uint8_t *)&hci_env,0,sizeof( struct hci_env_tag));
+	memset((uint8_t *)&prf_env,0,sizeof( struct prf_env_tag));
 	
-    memset(appm_state,0,sizeof(appm_state));
-    memset(gattc_env,0,sizeof(gattc_env));
-    memset(gattc_state,0,sizeof(gattc_state));
-    memset(gattm_state,0,sizeof(gattm_state));
-    ((stack_clear_global_var_handler)SVC_stack_clear_global_var)();
+	memset(appm_state,0,sizeof(appm_state));
+	memset(gattc_env,0,sizeof(gattc_env));
+	memset(gattc_state,0,sizeof(gattc_state));
+	memset(gattm_state,0,sizeof(gattm_state));
+	((stack_clear_global_var_handler)SVC_stack_clear_global_var)();
 	app_fun_resgister();
 	#if(TEMP_CHANGE_CALIB)
 	adc_temp_param_init();
@@ -121,7 +121,7 @@ void sys_clear_global_var(void)
 	USART_RX_CNT = 0;
 	sys_power_flag = 0;
 	sys_sleep_flag = 0;
-    sys_ble_conn_flag = 0;
+	sys_ble_conn_flag = 0;
 	app_var.Wakeup_int = 0;
 	app_var.rf_close_en = RF_CLOSE_EN;	
 	app_var.Gpio_retain_en = GPIO_RETAIN_EN;
@@ -185,11 +185,11 @@ void periph_init(void)
 	/* Unlock protected registers */
 	SYS_UnlockReg();
 	//  CLK_InitHXTPLL();
-    CLK->WAKEUPCTL = 0x08100010;
-    
-    if(app_info.default_use_ext_32k)
+	CLK->WAKEUPCTL = 0x08100010;
+	
+	if(app_info.default_use_ext_32k)
 		SYS->P0_MFP |= SYS_MFP_P05_32K|SYS_MFP_P06_32K;
-    
+	
 	#if(EXT_WAKEUP)
 	//P52设置成GPIO;
 	SYS->P5_MFP |= SYS_MFP_P52_GPIO;
@@ -197,32 +197,32 @@ void periph_init(void)
 	GPIO_PullUp(P5, BIT2,GPIO_PULLUP_DISABLE);
 	#endif
 	
-    CLK_EnableModuleClock(TMR2_MODULE);
-    CLK_EnableModuleClock(ANAC_MODULE);
-    CLK_EnableModuleClock(MDM_MODULE);
-    
-    CLK_SetHCLK(CLK_CLKSEL0_HCLKSEL_DPLL_26M);
+	CLK_EnableModuleClock(TMR2_MODULE);
+	CLK_EnableModuleClock(ANAC_MODULE);
+	CLK_EnableModuleClock(MDM_MODULE);
+	
+	CLK_SetHCLK(CLK_CLKSEL0_HCLKSEL_DPLL_26M);
 	
 	#if(SPROM_DEC)
 	((FUNC_PTR *)(FMC_SPROM_BASE+1))();				//SPROM的程序在"03_MCU\PN1020-peripheral\SampleCode\StdDriver\FMC\SPROM_project\Keil"目录下
-    #endif
+	#endif
 	
-    /* Update System Core Clock */
-    SystemCoreClockUpdate();
+	/* Update System Core Clock */
+	SystemCoreClockUpdate();
 
-    /* Lock protected registers */
-    SYS_LockReg();
-    /*---------------------------------------------------------------------------------------------------------*/
-    /* Init I/O Multi-function                                                                                 */
-    /*---------------------------------------------------------------------------------------------------------*/
-    /* Set P0 multi-function pins for UART0 RXD, TXD */
+	/* Lock protected registers */
+	SYS_LockReg();
+	/*---------------------------------------------------------------------------------------------------------*/
+	/* Init I/O Multi-function                                                                                 */
+	/*---------------------------------------------------------------------------------------------------------*/
+	/* Set P0 multi-function pins for UART0 RXD, TXD */
 #if (ENABLE_UART0 && (XN297_MODE_EN == 0))
 	UART_InitTypeDef Init_Struct;
 
 	SYS->P1_MFP |= SYS_MFP_P12_UART0_RXD|SYS_MFP_P13_UART0_TXD;   	
 	GPIO_ENABLE_DIGITAL_PATH(P1,(1<<2));
 	CLK_EnableModuleClock(UART0_MODULE);
-    
+	
 	#if(EXT_WAKEUP)
 	Init_Struct.UART_BaudRate = 921600;
 	#else
@@ -232,18 +232,18 @@ void periph_init(void)
 
 	/* Init UART0 for printf */
 	UART_Init ( UART0, &Init_Struct );
-    
-    UART_ResetRxFifo ( UART0 );
-    UART_EnableFifo ( UART0 );
+	
+	UART_ResetRxFifo ( UART0 );
+	UART_EnableFifo ( UART0 );
 
 	UART_EnableIrq ( UART0, Uart_irq_erbfi );
-    
+	
 	NVIC_ClearPendingIRQ ( UART0_IRQn );
 	NVIC_EnableIRQ ( UART0_IRQn );
 	((interrupt_register_handler)SVC_interrupt_register)(UART0_IRQ,UART0_Handler);		//register uart0 interrupt callback function
 #else	
 	hci_uart_init();
-    hci_uart_task_init();
+	hci_uart_task_init();
 #endif
 
 //	SysTick_init(); 

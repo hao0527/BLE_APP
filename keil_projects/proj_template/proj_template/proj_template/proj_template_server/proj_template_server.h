@@ -10,40 +10,40 @@
 
 enum proj_template_server_state
 {
-    /// Idle state
-    PROJ_TEMPLATE_SVS_IDLE,
-    /// busy state
-    PROJ_TEMPLATE_SVS_BUSY,
-    /// Number of defined states.
-    PROJ_TEMPLATE_SVS_STATE_MAX
+	/// Idle state
+	PROJ_TEMPLATE_SVS_IDLE,
+	/// busy state
+	PROJ_TEMPLATE_SVS_BUSY,
+	/// Number of defined states.
+	PROJ_TEMPLATE_SVS_STATE_MAX
 };
 
 enum
 {
-    TRX_SVC_UUID        = 0xFFF0,
-    TRX_CHAR_S2C_UUID   = 0xFFF1,
-    TRX_CHAR_C2S_UUID   = 0xFFF2,
-    TRX_CHAR_CTRL_UUID  = 0xFFF3,
-    TRX_CHAR_ENCPT_UUID = 0xFFF4,
+	TRX_SVC_UUID        = 0xFFF0,
+	TRX_CHAR_S2C_UUID   = 0xFFF1,
+	TRX_CHAR_C2S_UUID   = 0xFFF2,
+	TRX_CHAR_CTRL_UUID  = 0xFFF3,
+	TRX_CHAR_ENCPT_UUID = 0xFFF4,
 };
 
 //attibute idex
 enum
 {
-    PROJ_TEMPLATE_IDX_SVC, 
-    
-    PROJ_TEMPLATE_IDX_S2C_CHAR, 
-    PROJ_TEMPLATE_IDX_S2C_VAL, 
-    PROJ_TEMPLATE_IDX_S2C_USER_DESC, 
-    PROJ_TEMPLATE_IDX_S2C_CLIENT_CFG, 
-    PROJ_TEMPLATE_IDX_C2S_CHAR, 
-    PROJ_TEMPLATE_IDX_C2S_VAL, 
-    PROJ_TEMPLATE_IDX_C2S_USER_DESC, 
-    PROJ_TEMPLATE_IDX_CTRL_CHAR, 
-    PROJ_TEMPLATE_IDX_CTRL_VAL, 
-    PROJ_TEMPLATE_IDX_CTRL_USER_DESC,
-    PROJ_TEMPLATE_IDX_CTRL_CLIENT_CFG,
-    PROJ_TEMPLATE_IDX_NB,
+	PROJ_TEMPLATE_IDX_SVC, 
+	
+	PROJ_TEMPLATE_IDX_S2C_CHAR, 
+	PROJ_TEMPLATE_IDX_S2C_VAL, 
+	PROJ_TEMPLATE_IDX_S2C_USER_DESC, 
+	PROJ_TEMPLATE_IDX_S2C_CLIENT_CFG, 
+	PROJ_TEMPLATE_IDX_C2S_CHAR, 
+	PROJ_TEMPLATE_IDX_C2S_VAL, 
+	PROJ_TEMPLATE_IDX_C2S_USER_DESC, 
+	PROJ_TEMPLATE_IDX_CTRL_CHAR, 
+	PROJ_TEMPLATE_IDX_CTRL_VAL, 
+	PROJ_TEMPLATE_IDX_CTRL_USER_DESC,
+	PROJ_TEMPLATE_IDX_CTRL_CLIENT_CFG,
+	PROJ_TEMPLATE_IDX_NB,
 };
 
 
@@ -64,15 +64,15 @@ enum
 
 struct proj_template_server_env_tag
 {
-    /// profile environment
-    prf_env_t prf_env;
-    /// On-going operation
-    struct ke_msg * operation;
-    /// Services Start Handle
-    uint16_t   start_hdl;
-    ke_state_t state[PROJ_TEMPLATE_SERVER_IDX_MAX];
-    uint16_t   client_cfg_s2c[BLE_CONNECTION_MAX];
-    uint16_t   client_cfg_ctrl[BLE_CONNECTION_MAX];
+	/// profile environment
+	prf_env_t prf_env;
+	/// On-going operation
+	struct ke_msg * operation;
+	/// Services Start Handle
+	uint16_t   start_hdl;
+	ke_state_t state[PROJ_TEMPLATE_SERVER_IDX_MAX];
+	uint16_t   client_cfg_s2c[BLE_CONNECTION_MAX];
+	uint16_t   client_cfg_ctrl[BLE_CONNECTION_MAX];
 };
 
 extern struct proj_template_server_env_tag proj_template_server_env;

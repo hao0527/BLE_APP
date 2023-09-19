@@ -24,8 +24,8 @@ struct proj_template_env_tag proj_template_env;
 void proj_template_ini(void)
 {
 	memset(&proj_template_env,0x00,sizeof(proj_template_env));
-    
-    proj_template_get_flash_cmd();
+	
+	proj_template_get_flash_cmd();
 }
 
 void proj_template_start_advertising(void)
@@ -128,37 +128,37 @@ void proj_template_store_info(void *buf, uint8_t store_type)
 	{
 		case PROJ_TEMPLATE_STORE_TYPE_LTK:
 		{
-            
-            memcpy(proj_template_env.info.stored_ltk.ltk.key, buf, sizeof(struct gapc_ltk) );
-        }
+			
+			memcpy(proj_template_env.info.stored_ltk.ltk.key, buf, sizeof(struct gapc_ltk) );
+		}
 		break;
 		
-        case PROJ_TEMPLATE_STORE_TYPE_NTF:
-        {            
+		case PROJ_TEMPLATE_STORE_TYPE_NTF:
+		{            
 			memcpy(&proj_template_env.info.ntf_cfg, buf, 2);
-        }
+		}
 		break;
 		
-        case PROJ_TEMPLATE_STORE_TYPE_BONDED:
-        {            
+		case PROJ_TEMPLATE_STORE_TYPE_BONDED:
+		{            
 			proj_template_env.info.bonded = app_sec_env.bonded;
-        }
+		}
 		break;
-        
+		
 		case PROJ_TEMPLATE_STORE_TYPE_PEER_BD_ADDRESS:
 		{            
-            memcpy(&proj_template_env.info.stored_peer_addr, buf, sizeof(struct gap_bdaddr));
-            #if(APP_WHITE_LIST)
-            appm_add_white_list((struct gap_bdaddr*)&proj_template_env.info.stored_peer_addr);
-            #endif
-        }
+			memcpy(&proj_template_env.info.stored_peer_addr, buf, sizeof(struct gap_bdaddr));
+			#if(APP_WHITE_LIST)
+			appm_add_white_list((struct gap_bdaddr*)&proj_template_env.info.stored_peer_addr);
+			#endif
+		}
 		break;
 		
 		default:
-        {
-            
-        }
-        break;
+		{
+			
+		}
+		break;
 	}
 }
 
@@ -188,12 +188,12 @@ void *proj_template_get_store_info(uint8_t store_type)
 
 void proj_template_remove_bond(void)
 {
-    app_sec_remove_bond();
+	app_sec_remove_bond();
 }
 
 void proj_template_clr_store_info(void)
 {
-    SYS_UnlockReg();
+	SYS_UnlockReg();
 	FMC_Open();
 	FMC_ENABLE_AP_UPDATE();
 	FMC_Erase(STORE_INFO_FLASH_ADDR);
@@ -210,24 +210,24 @@ void proj_template_get_flash_cmd(void)
 	FMC_Open();
 	FMC_ENABLE_AP_UPDATE();
 
-    for(int i = 0;i<sizeof(struct proj_template_env_tag);i++)
-    {
-        proj_template_data[i] = FMC_Read(STORE_INFO_FLASH_ADDR + 4 * i);
-    }
-    memcpy(&proj_template_env,proj_template_data,sizeof(struct proj_template_env_tag));
+	for(int i = 0;i<sizeof(struct proj_template_env_tag);i++)
+	{
+		proj_template_data[i] = FMC_Read(STORE_INFO_FLASH_ADDR + 4 * i);
+	}
+	memcpy(&proj_template_env,proj_template_data,sizeof(struct proj_template_env_tag));
 	FMC_Close();
 	SYS_LockReg();
 }
 
 void proj_template_store_flash_data(void)
 {
-    uint8 *proj_template_data = (uint8 *)&proj_template_env;
+	uint8 *proj_template_data = (uint8 *)&proj_template_env;
 
 	SYS_UnlockReg();
 	FMC_Open();
 	FMC_ENABLE_AP_UPDATE();
 	
-    FMC_Erase(STORE_INFO_FLASH_ADDR);
+	FMC_Erase(STORE_INFO_FLASH_ADDR);
 	for(int i = 0;i<sizeof(struct proj_template_env_tag);i++)
 	{
 		FMC_Write(STORE_INFO_FLASH_ADDR + i * 4,proj_template_data[i]);

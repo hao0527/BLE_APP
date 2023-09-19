@@ -62,9 +62,9 @@
 
 /// Flag indicating if stack is compiled in dual or single mode
 #if defined(CFG_BLE)
-    #define BT_DUAL_MODE                     0
-    #define BT_STD_MODE                      0
-    #define BLE_STD_MODE                     1
+	#define BT_DUAL_MODE                     0
+	#define BT_STD_MODE                      0
+	#define BLE_STD_MODE                     1
 #endif // CFG_BT
 
 
@@ -76,11 +76,11 @@
 
 /// Flag indicating if stack is compiled for BLE1.0 HW or later
 #if defined (CFG_BLECORE_11)
-    #define BLE11_HW                    1
-    #define BLE12_HW                    0
+	#define BLE11_HW                    1
+	#define BLE12_HW                    0
 #else // defined (CFG_BLECORE_11)
-    #define BLE11_HW                    0
-    #define BLE12_HW                    1
+	#define BLE11_HW                    0
+	#define BLE12_HW                    1
 #endif // defined (CFG_BLECORE_11)
 /******************************************************************************************/
 /* -------------------------   STACK PARTITIONING      -----------------------------------*/
@@ -148,7 +148,7 @@
 #define BLE_CENTRAL       (defined(CFG_CENTRAL)     || defined(CFG_ALLROLES))
 
 #if (!BLE_BROADCASTER) && (!BLE_OBSERVER) && (!BLE_PERIPHERAL) && (!BLE_CENTRAL)
-    #error "No application role defined"
+	#error "No application role defined"
 #endif /* #if (!BLE_BROADCASTER) && (!BLE_OBSERVER) && (!BLE_PERIPHERAL) && (!BLE_CENTRAL) */
 
 
@@ -158,11 +158,11 @@
 
 /// Maximum number of simultaneous connections
 #if (BLE_CENTRAL)
-    #define BLE_CONNECTION_MAX          CFG_CON
+	#define BLE_CONNECTION_MAX          CFG_CON
 #elif (BLE_PERIPHERAL)
-    #define BLE_CONNECTION_MAX          1
+	#define BLE_CONNECTION_MAX          1
 #else
-    #define BLE_CONNECTION_MAX          1
+	#define BLE_CONNECTION_MAX          1
 #endif /* #if (BLE_CENTRAL) */
 
 /// Support of Legacy Air Operations
@@ -215,11 +215,11 @@
 /// may have to be increased when CPU is very slow to free the received data, in order not
 /// to overflow the RX ring of buffers.
 #if (BLE_CENTRAL || BLE_PERIPHERAL)
-    #define BLE_RX_BUFFER_CNT           4//7
+	#define BLE_RX_BUFFER_CNT           4//7
 #elif (BLE_BROADCASTER)
-    #define BLE_RX_BUFFER_CNT           1
+	#define BLE_RX_BUFFER_CNT           1
 #else
-    #define BLE_RX_BUFFER_CNT           4
+	#define BLE_RX_BUFFER_CNT           4
 #endif // BLE_CENTRAL || BLE_PERIPHERAL
 
 
@@ -242,9 +242,9 @@
 
 /// DEEP SLEEP enable
 #if defined(CFG_SLEEP) && (BLE_EMB_PRESENT || BT_EMB_PRESENT)
-    #define DEEP_SLEEP                              1
+	#define DEEP_SLEEP                              1
 #else
-    #define DEEP_SLEEP                              0
+	#define DEEP_SLEEP                              0
 #endif /* CFG_SLEEP */
 
 /// Use 32K Hz Clock if set to 1 else 32,768k is used
@@ -275,9 +275,9 @@
 /// Channel Assessment
 #if defined(CFG_BLE)
 #if (defined(CFG_CHNL_ASSESS) && BLE_CENTRAL)
-    #define BLE_CHNL_ASSESS        (1)
+	#define BLE_CHNL_ASSESS        (1)
 #else
-    #define BLE_CHNL_ASSESS        (0)
+	#define BLE_CHNL_ASSESS        (0)
 #endif //(defined(CFG_CHNL_ASSESS) && BLE_CENTRAL)
 #endif //defined(CFG_BLE)
 
@@ -293,60 +293,60 @@
 
 /// Flag indicating if tester emulator is available or not
 #if defined(CFG_TESTER)
-    #define RW_TESTER                   1
+	#define RW_TESTER                   1
 #else
-    #define RW_TESTER                   0
+	#define RW_TESTER                   0
 #endif // defined (CFG_TESTER)
 
 /// Flag indicating if debug mode is activated or not
 #if defined(CFG_DBG)
-    #define RW_DEBUG                        1
+	#define RW_DEBUG                        1
 #if (BLE_EMB_PRESENT || BT_EMB_PRESENT)
-    #define RW_SWDIAG                      0	// 1
+	#define RW_SWDIAG                      0	// 1
 #else
-    #define RW_SWDIAG                       0
+	#define RW_SWDIAG                       0
 #endif
-    #define KE_PROFILING                    1
+	#define KE_PROFILING                    1
 	
 #else
-    #define RW_DEBUG                        0
-    #define RW_SWDIAG                       0
-    #define KE_PROFILING                    0
+	#define RW_DEBUG                        0
+	#define RW_SWDIAG                       0
+	#define KE_PROFILING                    0
 #endif /* CFG_DBG */
 
 /// Flag indicating if Read/Write memory commands are supported or not
 #if defined(CFG_DBG_MEM)
-    #define RW_DEBUG_MEM               1
+	#define RW_DEBUG_MEM               1
 #else //CFG_DBG_MEM
-    #define RW_DEBUG_MEM               0
+	#define RW_DEBUG_MEM               0
 #endif //CFG_DBG_MEM
 
 /// Flag indicating if Flash debug commands are supported or not
 #if defined(CFG_DBG_FLASH)
-    #define RW_DEBUG_FLASH                  1
+	#define RW_DEBUG_FLASH                  1
 #else //CFG_DBG_FLASH
-    #define RW_DEBUG_FLASH                  0
+	#define RW_DEBUG_FLASH                  0
 #endif //CFG_DBG_FLASH
 
 /// Flag indicating if NVDS feature is supported or not
 #if defined(CFG_DBG_NVDS)
-    #define RW_DEBUG_NVDS                   1
+	#define RW_DEBUG_NVDS                   1
 #else //CFG_DBG_NVDS
-    #define RW_DEBUG_NVDS                   0
+	#define RW_DEBUG_NVDS                   0
 #endif //CFG_DBG_NVDS
 
 /// Flag indicating if CPU stack profiling commands are supported or not
 #if defined(CFG_DBG_STACK_PROF)
-    #define RW_DEBUG_STACK_PROF             1
+	#define RW_DEBUG_STACK_PROF             1
 #else
-    #define RW_DEBUG_STACK_PROF             0
+	#define RW_DEBUG_STACK_PROF             0
 #endif // defined (CFG_DBG_STACK_PROF)
 
 /// Debug printing
 #if (RW_DEBUG)
-    #define WARNING(P)                      dbg_warning P
+	#define WARNING(P)                      dbg_warning P
 #else
-    #define WARNING(P)
+	#define WARNING(P)
 #endif //RW_DEBUG
 
 /// Modem back to back setup
@@ -360,9 +360,9 @@
 
 /// Flag indicating if NVDS feature is supported or not
 #if defined(CFG_NVDS)
-    #define NVDS_SUPPORT                    1
+	#define NVDS_SUPPORT                    1
 #else //CFG_DBG_NVDS
-    #define NVDS_SUPPORT                    0
+	#define NVDS_SUPPORT                    0
 #endif //CFG_DBG_NVDS
 
 
@@ -402,86 +402,86 @@
 /// Event types definition
 enum KE_EVENT_TYPE
 {
-    #if BLE_EMB_PRESENT
-    KE_EVENT_BLE_CRYPT       ,  // 0x00, 0x00000001
-    #endif //BLE_EMB_PRESENT
+	#if BLE_EMB_PRESENT
+	KE_EVENT_BLE_CRYPT       ,  // 0x00, 0x00000001
+	#endif //BLE_EMB_PRESENT
 
-    KE_EVENT_KE_MESSAGE      ,  // 0x01, 0x00000002
-    KE_EVENT_KE_TIMER        ,  // 0x02, 0x00000004
+	KE_EVENT_KE_MESSAGE      ,  // 0x01, 0x00000002
+	KE_EVENT_KE_TIMER        ,  // 0x02, 0x00000004
 
-    #if (GTL_ITF)
-    KE_EVENT_GTL_TX_DONE     ,
-    #endif //(GTL_ITF)
+	#if (GTL_ITF)
+	KE_EVENT_GTL_TX_DONE     ,
+	#endif //(GTL_ITF)
 
 
-    #if HCIC_ITF || HCIH_ITF
-    //KE_EVENT_HCI_TX_DONE     ,
-    #endif //HCIC_ITF || HCIH_ITF
+	#if HCIC_ITF || HCIH_ITF
+	//KE_EVENT_HCI_TX_DONE     ,
+	#endif //HCIC_ITF || HCIH_ITF
 
-    #if BLE_EMB_PRESENT
-    KE_EVENT_BLE_EVT_END     ,  // 0x03, 0x00000008
-    KE_EVENT_BLE_RX          ,  // 0x04, 0x00000010
-    KE_EVENT_BLE_EVT_START   ,  // 0x05, 0x00000020
-    #endif //BLE_EMB_PRESENT
+	#if BLE_EMB_PRESENT
+	KE_EVENT_BLE_EVT_END     ,  // 0x03, 0x00000008
+	KE_EVENT_BLE_RX          ,  // 0x04, 0x00000010
+	KE_EVENT_BLE_EVT_START   ,  // 0x05, 0x00000020
+	#endif //BLE_EMB_PRESENT
 
 #if (BLE_HOST_PRESENT)
 #if (BLE_L2CC)
-    KE_EVENT_L2CAP_TX        ,  // 0x06, 0x00000040
+	KE_EVENT_L2CAP_TX        ,  // 0x06, 0x00000040
 #endif //(BLE_L2CC)
 #endif// (BLE_HOST_PRESENT)
 
 
 
-    KE_EVENT_MAX             ,
+	KE_EVENT_MAX             ,
 };
 
 /// Tasks types definition, change with TASK_ID_TYPE in rwip_task.h
 enum KE_TASK_TYPE
 {
-    // Link Layer Tasks
-    TASK_LLM          = 0   ,
-    TASK_LLC          = 1   ,
-    TASK_LLD          = 2   ,
-    TASK_DBG          = 3   ,
-    
-    TASK_SMPM		  = 6	,
+	// Link Layer Tasks
+	TASK_LLM          = 0   ,
+	TASK_LLC          = 1   ,
+	TASK_LLD          = 2   ,
+	TASK_DBG          = 3   ,
+	
+	TASK_SMPM		  = 6	,
 	TASK_SMPC		  = 7	,
 	TASK_HCI		  = 8	,
 	TASK_DISPLAY	  = 9	,
 
 
-    TASK_L2CC 	  	  = 10,
-    TASK_GATTM        = 11  ,   // Generic Attribute Profile Manager Task
-    TASK_GATTC        = 12  ,   // Generic Attribute Profile Controller Task
-    TASK_GAPM         = 13  ,   // Generic Access Profile Manager
-    TASK_GAPC         = 14  ,   // Generic Access Profile Controller
+	TASK_L2CC 	  	  = 10,
+	TASK_GATTM        = 11  ,   // Generic Attribute Profile Manager Task
+	TASK_GATTC        = 12  ,   // Generic Attribute Profile Controller Task
+	TASK_GAPM         = 13  ,   // Generic Access Profile Manager
+	TASK_GAPC         = 14  ,   // Generic Access Profile Controller
 
-     // allocate a certain number of profiles task
-    TASK_PRF_MAX = (TASK_GAPC + BLE_NB_PROFILES + 1),   // no use 
-    
-    
+	 // allocate a certain number of profiles task
+	TASK_PRF_MAX = (TASK_GAPC + BLE_NB_PROFILES + 1),   // no use 
+	
+	
 	TASK_APP		  = 26,		//for general GAP operation
 	TASK_GTL		 	,
 
-    TASK_MAX 		   = 30,
-    TASK_NONE = 0xFF,
+	TASK_MAX 		   = 30,
+	TASK_NONE = 0xFF,
 };
 
 
 /// Kernel memory heaps types.
 enum
 {
-    /// Memory allocated for environment variables
-    KE_MEM_ENV,
-    #if (BLE_HOST_PRESENT)
-    /// Memory allocated for Attribute database
-    KE_MEM_ATT_DB,
-    #endif // (BLE_HOST_PRESENT)
-    /// Memory allocated for kernel messages
-    KE_MEM_KE_MSG,
-    /// Non Retention memory block
-    KE_MEM_NON_RETENTION,
-    KE_MEM_BLOCK_MAX,
+	/// Memory allocated for environment variables
+	KE_MEM_ENV,
+	#if (BLE_HOST_PRESENT)
+	/// Memory allocated for Attribute database
+	KE_MEM_ATT_DB,
+	#endif // (BLE_HOST_PRESENT)
+	/// Memory allocated for kernel messages
+	KE_MEM_KE_MSG,
+	/// Non Retention memory block
+	KE_MEM_NON_RETENTION,
+	KE_MEM_BLOCK_MAX,
 };
 
 
@@ -512,28 +512,28 @@ enum
 
 /// Number of Kernel tasks
 #define KE_TASK_SIZE             (  DEBUG_TASK_SIZE       + \
-                                    TL_TASK_SIZE          + \
-                                    BLE_APP_TASK_SIZE     + \
-                                    BT_TASK_SIZE_         + \
-                                    BLE_TASK_SIZE_        + \
-                                    APP_TASK_SIZE_        + \
-                                    BLEHL_TASK_SIZE_         )
+									TL_TASK_SIZE          + \
+									BLE_APP_TASK_SIZE     + \
+									BT_TASK_SIZE_         + \
+									BLE_TASK_SIZE_        + \
+									APP_TASK_SIZE_        + \
+									BLEHL_TASK_SIZE_         )
 
 //Add later
 
   /// Kernel Message Heap
 #define RWIP_HEAP_MSG_SIZE         (  BT_HEAP_MSG_SIZE_      + \
-                                    BLE_HEAP_MSG_SIZE_     + \
-                                    BLEHL_HEAP_MSG_SIZE_      )
-                                  
+									BLE_HEAP_MSG_SIZE_     + \
+									BLEHL_HEAP_MSG_SIZE_      )
+								  
 /// Number of link in kernel environment TODO [FBE] add a define in scons build
 #define KE_NB_LINK_IN_HEAP_ENV   4
 
 /// Size of Environment heap
 #define RWIP_HEAP_ENV_SIZE         (( BT_HEAP_ENV_SIZE_         + \
-                                      BLE_HEAP_ENV_SIZE_        + \
-                                      BLEHL_HEAP_ENV_SIZE_       )\
-                                      * KE_NB_LINK_IN_HEAP_ENV)
+									  BLE_HEAP_ENV_SIZE_        + \
+									  BLEHL_HEAP_ENV_SIZE_       )\
+									  * KE_NB_LINK_IN_HEAP_ENV)
 
 /// Size of Attribute database heap
 #define RWIP_HEAP_DB_SIZE         (  BLEHL_HEAP_DB_SIZE_  )

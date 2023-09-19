@@ -57,15 +57,15 @@ void ble_sleep_wakeup_init()
 {
 	periph_init();																//System peripheral initialization
 	
-    GLOBAL_INT_STOP();
-    
-    ble_master_tgsoft_rst_setf(1);
-    while(ble_master_tgsoft_rst_getf());
-    ((lld_sleep_init_handler)SVC_lld_sleep_init)(0,0,0);                     		//Link layer sleep initialization
+	GLOBAL_INT_STOP();
+	
+	ble_master_tgsoft_rst_setf(1);
+	while(ble_master_tgsoft_rst_getf());
+	((lld_sleep_init_handler)SVC_lld_sleep_init)(0,0,0);                     		//Link layer sleep initialization
 	((rf_pa_ramp_init_handler)SVC_rf_pa_ramp_init)();							//tx power init
 	((ble_int_cfg_handler)SVC_ble_int_cfg)();                        			//Protocol stack interrupt configuration
-    ((lld_enable_cscnt_slp_int_handler)SVC_lld_enable_cscnt_slp_int)();       	//Enable interrupt configuration
-    GLOBAL_INT_START();                   										//Enable global interrupt
+	((lld_enable_cscnt_slp_int_handler)SVC_lld_enable_cscnt_slp_int)();       	//Enable interrupt configuration
+	GLOBAL_INT_START();                   										//Enable global interrupt
 
 	((ke_event_set_handler)SVC_ke_event_set)(KE_EVENT_BLE_EVT_START);			//Start ble event after wake up
 	#if(EXT_WAKEUP)
@@ -76,18 +76,18 @@ void ble_sleep_wakeup_init()
 
 __asm void stack_sp_restore(void)
 {
-    LDR     R6 ,=0x20003ffc
-    LDR     R7 ,[R6,#0]
-    MSR     MSP, R7
-    NOP
-    BX          LR   
+	LDR     R6 ,=0x20003ffc
+	LDR     R7 ,[R6,#0]
+	MSR     MSP, R7
+	NOP
+	BX          LR   
 }
 
 //POWER UP init
 void ble_normal_reset_init()
 {
-    sys_clear_global_var();
-    periph_init();
+	sys_clear_global_var();
+	periph_init();
 	
 	printf("CPU @ %dHz,%s\n", SystemCoreClock, app_info.co_default_bdname);
 	#if(PROJ_OTA)
@@ -102,17 +102,17 @@ void ble_normal_reset_init()
 	app_flash_init();
 	#endif
 	
-    GLOBAL_INT_START();
+	GLOBAL_INT_START();
 
-    proj_template_ini();
-    user_code_start(); 											//start ble stack
+	proj_template_ini();
+	user_code_start(); 											//start ble stack
 }
 
 //init finish,ble stack process
 void ble_stack_process()
 {
-    while (1)
-    {
+	while (1)
+	{
 		#if(EXT_WAKEUP)
 		if(P52 == 1)				//ºÏ≤‚P52∏ﬂµÁ∆Ω 
 		{
@@ -135,14 +135,14 @@ void ble_stack_process()
 		rf_calibration_process();
 		#endif
 		
-        if (app_var.default_sleep_en)
-        {
-            GLOBAL_INT_DISABLE();
+		if (app_var.default_sleep_en)
+		{
+			GLOBAL_INT_DISABLE();
 			
-            // Check if the processor clock can be gated
+			// Check if the processor clock can be gated
 			if(((bleip_sleep_handler)SVC_bleip_sleep)())
-            {
-                CLK_PowerDown();
+			{
+				CLK_PowerDown();
 				#if(GPIO_RETAIN_EN)
 				if(sys_sleep_flag == 1)
 				{
@@ -154,11 +154,11 @@ void ble_stack_process()
 					#endif
 				}
 				#endif
-            }
-            // Checks for sleep have to be done with interrupt disabled
-            GLOBAL_INT_RESTORE();
-        }
-    }
+			}
+			// Checks for sleep have to be done with interrupt disabled
+			GLOBAL_INT_RESTORE();
+		}
+	}
 }
 
 
@@ -166,21 +166,21 @@ void ble_stack_process()
 //system init
 void ble_init(void)
 {
-    if(ble_deep_sleep_stat_getf())
+	if(ble_deep_sleep_stat_getf())
 	{
-        ble_sleep_wakeup_init();
-    }
-    else
-    {   
-        ble_normal_reset_init();
-    }
+		ble_sleep_wakeup_init();
+	}
+	else
+	{   
+		ble_normal_reset_init();
+	}
 }
 
 int main(void)
 {
 	stack_sp_restore();
-    ble_init();
-    ble_stack_process();
+	ble_init();
+	ble_stack_process();
 }
 
 /*** (C) COPYRIGHT 2016   Shanghai Panchip Microelectronics Co., Ltd.   ***/

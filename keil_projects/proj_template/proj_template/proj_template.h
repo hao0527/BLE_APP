@@ -8,13 +8,13 @@
 
 typedef struct sotre_info
 {
-    //stored ltk
+	//stored ltk
 	struct gapc_ltk     stored_ltk;
-    //stored peer addr
+	//stored peer addr
 	struct gap_bdaddr   stored_peer_addr;
-    //stored keyboard ntf
+	//stored keyboard ntf
 	uint16_t            ntf_cfg[3];
-    //stroed bonded
+	//stroed bonded
 	bool                bonded;
 } sotre_info_t;
 

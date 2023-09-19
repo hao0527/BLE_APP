@@ -26,12 +26,12 @@
 /// Message API of the SPS_SERVER task
 enum
 {
-    /// Enables the Serial Port Service Device profile. The profile has to be enabled only
-    /// once a connection has been established by the application
-    PROJ_TEMPLATE_SERVER_ENABLE_REQ = KE_FIRST_MSG(TASK_ID_PROJ_TEMPLATE_SERVER),
-    
-    //Enable condirmation message
-    PROJ_TEMPLATE_SERVER_ENABLE_RSP,
+		/// Enables the Serial Port Service Device profile. The profile has to be enabled only
+		/// once a connection has been established by the application
+		PROJ_TEMPLATE_SERVER_ENABLE_REQ = KE_FIRST_MSG(TASK_ID_PROJ_TEMPLATE_SERVER),
+		
+		//Enable condirmation message
+		PROJ_TEMPLATE_SERVER_ENABLE_RSP,
 		
 		//peer write data to att idx
 		PROJ_TEMPLATE_SERVER_PEER_WRITE_DATA_IND,
@@ -43,32 +43,32 @@ enum
 
 struct proj_template_server_db_cfg
 {
-    uint32_t features;
+		uint32_t features;
 };
 
 /// @ref PROJ_TEMPLATE_SERVER_ENABLE_REQ parameters structure description.
 struct proj_template_server_enable_req
 {
-    /// connection index
-    uint8_t  conidx;
-    /// Notification Configuration
-    uint8_t  ntf_cfg;
+		/// connection index
+		uint8_t  conidx;
+		/// Notification Configuration
+		uint8_t  ntf_cfg;
 };
 
 /// Parameters of the @ref BASS_ENABLE_RSP message
 struct proj_template_server_enable_rsp
 {
-    /// connection index
-    uint8_t conidx;
-    ///status
-    uint8_t status;
+		/// connection index
+		uint8_t conidx;
+		///status
+		uint8_t status;
 };
 
 struct proj_template_server_peer_write_data_ind
 {
 		uint8_t 	conidx;
 		uint8_t		att_idx;
-    uint8_t 	packet[PROJ_TEMPLATE_SERVER_PACKET_SIZE];
+		uint8_t 	packet[PROJ_TEMPLATE_SERVER_PACKET_SIZE];
 		uint8_t 	packet_size;
 };
 
@@ -84,6 +84,6 @@ struct proj_template_server_write_cmd
 		uint8_t		att_idx;
 		uint8_t 	write_type;
 		uint8_t 	packet_size;
-    uint8_t 	packet[];
+		uint8_t 	packet[];
 };
 #endif // TMP_SERVER_TASK_H_

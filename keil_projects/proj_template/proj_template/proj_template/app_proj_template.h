@@ -15,16 +15,16 @@
 
 struct app_proj_template_env_tag
 {
-    /// Connection handle
-    uint8_t conidx;
-    /// Mouse timeout value
-    uint16_t timeout;
-    /// Internal state of the module
-    uint8_t state;
-    /// Timer enabled
-    bool timer_enabled;
-    /// Number of report that can be sent
-    uint8_t nb_report;
+	/// Connection handle
+	uint8_t conidx;
+	/// Mouse timeout value
+	uint16_t timeout;
+	/// Internal state of the module
+	uint8_t state;
+	/// Timer enabled
+	bool timer_enabled;
+	/// Number of report that can be sent
+	uint8_t nb_report;
 };
 
 extern const struct ke_state_handler app_proj_template_table_handler;
