@@ -112,9 +112,9 @@ static int proj_template_server_peer_write_data_ind_handler(ke_msg_id_t const ms
 	
 	if(0xf3 == param->packet[0])
 	{
-		uint8 len = sprintf((char*)Sendata, "ch1:%.3f, ch2:%.3f", 
-							mcu_adc_get_voltage(MCU_P10_ADC_CH1), 
-							mcu_adc_get_voltage(MCU_P12_ADC_CH2));
+		uint8 len = sprintf((char*)Sendata, "%.3f, %.3f", 
+							mcu_adc_get_voltage(MCU_P12_ADC_CH2), 
+							mcu_adc_get_voltage(MCU_P13_ADC_CH3));
 		app_proj_template_send_value(PROJ_TEMPLATE_IDX_CTRL_VAL, Sendata, len);
 	}
 #endif

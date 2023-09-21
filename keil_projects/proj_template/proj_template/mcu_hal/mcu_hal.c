@@ -9,12 +9,12 @@
 void mcu_gpio_user_init(void)
 {
 	// gpio init
-	GPIO_PullUp(P1, BIT3, GPIO_PULLUP_ENABLE);
-	GPIO_ENABLE_DIGITAL_PATH(P1, BIT3);
-	SYS->P1_MFP &= ~(SYS_MFP_P13_Msk);
-	SYS->P1_MFP |= SYS_MFP_P13_GPIO;
-	GPIO_InitOutput(P1, BIT3, GPIO_HIGH_LEVEL);
-	GPIO_SetBits(P1, BIT3);	// ldo en 拉高
+	GPIO_PullUp(P1, BIT0, GPIO_PULLUP_ENABLE);
+	GPIO_ENABLE_DIGITAL_PATH(P1, BIT0);
+	SYS->P1_MFP &= ~(SYS_MFP_P10_Msk);
+	SYS->P1_MFP |= SYS_MFP_P10_GPIO;
+	GPIO_InitOutput(P1, BIT0, GPIO_HIGH_LEVEL);
+	GPIO_SetBits(P1, BIT0);	// ldo en 拉高
 }
 
 
@@ -160,10 +160,10 @@ void mcu_adc_isr(void)
 
 
 ////////////////////////////////////////////adc_user/////////////////////////////////////////////
-#define MCU_AVDD_CFG 3.3
+#define MCU_AVDD_CFG 2.5f
 MCU_ADC_TAB adcTable[] = {
-	{ADC_CH01, 100, MCU_AVDD_CFG/4096, P1, BIT0, &SYS->P1_MFP, SYS_MFP_P10_Msk, SYS_MFP_P10_ADC_CH1},
 	{ADC_CH02, 100, MCU_AVDD_CFG/4096, P1, BIT2, &SYS->P1_MFP, SYS_MFP_P12_Msk, SYS_MFP_P12_ADC_CH2},
+	{ADC_CH03, 100, MCU_AVDD_CFG/4096, P1, BIT3, &SYS->P1_MFP, SYS_MFP_P13_Msk, SYS_MFP_P13_ADC_CH3},
 };
 
 void mcu_adc_user_init(void)
