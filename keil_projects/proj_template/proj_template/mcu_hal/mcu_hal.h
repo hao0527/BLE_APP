@@ -38,6 +38,7 @@ typedef struct{
 }MCU_ADC_TAB;
 #pragma pack()
 void mcu_adc_init(MCU_ADC_TAB *p_table, uint8 tableNum);
+void mcu_adc_deinit(void);
 float mcu_adc_get_voltage(uint8 index);
 void mcu_adc_main(void);
 void mcu_adc_isr(void);
@@ -46,6 +47,7 @@ void mcu_adc_isr(void);
 enum {
 	MCU_P12_ADC_CH2 = 0,
 	MCU_P13_ADC_CH3,
+	MCU_ADC_NUM,
 };
 void mcu_adc_user_init(void);
 
