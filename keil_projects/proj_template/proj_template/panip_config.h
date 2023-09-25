@@ -21,7 +21,7 @@
 // DSP Log enable
 #define DBG_SYS_EN              (0)
 
-#define ENABLE_UART0			(1)
+#define ENABLE_UART0			(0)
 #define ENABLE_UART1			(1)
 #define USE_EXT_32K 	        (0) //macro of use external 32k 		
 #define SLEEP_EN		        (1) //maro of whether to use low power

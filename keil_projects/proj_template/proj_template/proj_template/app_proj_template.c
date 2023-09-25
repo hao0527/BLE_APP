@@ -22,6 +22,8 @@
 #include "app.h"
 #include "stack_svc_api.h"
 
+#include "mcu_hal.h"
+
 static struct app_proj_template_env_tag app_proj_template_env;
 void app_proj_template_init(void)
 {
@@ -102,14 +104,19 @@ static int proj_template_server_peer_write_data_ind_handler(ke_msg_id_t const ms
 											   ke_task_id_t const dest_id,
 											   ke_task_id_t const src_id)
 {
-#if 1
+#if 0
 	printf("recv %d\n", param->packet_size);
 #else
 	uint8_t Sendata[PROJ_TEMPLATE_SERVER_PACKET_SIZE] = {0};
-	
 	show_reg3(param->packet,param->packet_size);
-	memcpy(Sendata,param->packet,param->packet_size);
-	app_proj_template_send_value(PROJ_TEMPLATE_IDX_CTRL_VAL,Sendata,param->packet_size);
+	
+	if(0xf3 == param->packet[0])
+	{
+		uint8 len = sprintf((char*)Sendata, "%.3f, %.3f", 
+							mcu_adc_get_voltage(MCU_P12_ADC_CH2), 
+							mcu_adc_get_voltage(MCU_P13_ADC_CH3));
+		app_proj_template_send_value(PROJ_TEMPLATE_IDX_CTRL_VAL, Sendata, len);
+	}
 #endif
 	return (KE_MSG_CONSUMED);
 }
