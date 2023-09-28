@@ -177,6 +177,7 @@ void ble_init(void)
 	else
 	{   
 		ble_normal_reset_init();
+		temper_varInit();
 	}
 }
 

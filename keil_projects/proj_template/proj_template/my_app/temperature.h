@@ -15,5 +15,6 @@
 int8 temper_getTemperValue(uint16 cnt);
 uint16 temper_getTemperCnt(void);
 void temper_sampleTemper(void);
+void temper_varInit(void);
 
 #endif //__TEMPERATURE_H_

@@ -17,11 +17,19 @@ void mcu_gpio_user_init(void)
 	GPIO_SetBits(P1, BIT0);	// ldo en 拉高
 }
 
+void mcu_gpio_en_ldo(bool en)
+{
+	if(en)
+		GPIO_SetBits(P1, BIT0);		// ldo en 拉高
+	else
+		GPIO_ClearBits(P1, BIT0);	// ldo en 拉低
+}
 
 ////////////////////////////////////////////adc_driver/////////////////////////////////////////////
 static uint8 mcuAdcTableNum = 0;
 static MCU_ADC_TAB * p_mcuAdcTable = NULL;
 static volatile uint16 mcuAdcUserChIdx = 0;	// 当前采集点的Table索引信息，p_mcuAdcTable[mcuAdcUserChIdx]
+static bool mcuAdcIsInited = FALSE;
 
 /**
  * @brief 开启指定通道的单次转换
@@ -72,6 +80,7 @@ void mcu_adc_init(MCU_ADC_TAB *p_table, uint8 tableNum)
 
 	mcuAdcUserChIdx = 0;
 	mcu_adc_start_channel_convert(p_mcuAdcTable[mcuAdcUserChIdx].adcChannel);
+	mcuAdcIsInited = TRUE;
 }
 
 /**
@@ -82,6 +91,7 @@ void mcu_adc_deinit(void)
 	CLK_DisableModuleClock(ADC_MODULE);
     ADC_POWER_DOWN(ADC);
     NVIC_DisableIRQ(ADC_IRQn);
+	mcuAdcIsInited = FALSE;
 }
 
 /**
@@ -97,18 +107,22 @@ float mcu_adc_get_voltage(uint8 index)
 	return p_mcuAdcTable[index].voltage;
 }
 
+#define ADC_SAMPLE_TIMES_CFG 20
 /**
  * @brief adc采集一轮后求平均、算电压，开启下一轮
- * @note 所有通道采完平均过1次后会关ADC，低功耗需求
+ * @return 返回0表示未结束，返回-1表示异常，返回1表示采样结束
+ * @note 所有通道采完平均过ADC_SAMPLE_TIMES_CFG次后会关ADC，低功耗需求
  */
-void mcu_adc_main(void)
+int8 mcu_adc_main(void)
 {
 	uint8 i = 0;
-	bool rcIsZero = FALSE;
+	bool adcReady = TRUE;
 	
-	if(NULL==p_mcuAdcTable)
-		return;
-	
+	if(NULL == p_mcuAdcTable)
+		return -1;	// 未初始化
+	if(FALSE == mcuAdcIsInited)
+		return 1;	// 已关闭
+
 	if(mcuAdcUserChIdx >= mcuAdcTableNum)
 	{
 		for(i = 0; i < mcuAdcTableNum; i++)
@@ -125,13 +139,16 @@ void mcu_adc_main(void)
 		}
 		mcuAdcUserChIdx = 0;
 		for(i = 0; i < mcuAdcTableNum; i++)
-			if(!p_mcuAdcTable[i].rollCount)		// 平均过1次
-				rcIsZero = TRUE;
-		if(rcIsZero)
+			if(p_mcuAdcTable[i].rollCount < ADC_SAMPLE_TIMES_CFG)	// 采样不够配置的次数
+				adcReady = FALSE;
+		if(adcReady == FALSE)
 			mcu_adc_start_channel_convert(p_mcuAdcTable[mcuAdcUserChIdx].adcChannel);
-		else
-			mcu_adc_deinit();	// 所有通道已采完平均过1次，关ADC
+		else {
+			mcu_adc_deinit();	// 所有通道已采完，关ADC
+			return 1;
+		}
 	}
+	return 0;
 }
 
 /**
