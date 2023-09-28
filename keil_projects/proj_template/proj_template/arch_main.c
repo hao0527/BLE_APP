@@ -44,6 +44,7 @@
 
 // user include
 #include "mcu_hal.h"
+#include "temperature.h"
 
 const app_info_t app_info __attribute__((at(APP_INFO_ADDR)))=
 {
@@ -161,7 +162,6 @@ void ble_stack_process()
 			// Checks for sleep have to be done with interrupt disabled
 			GLOBAL_INT_RESTORE();
 		}
-		mcu_adc_main();
 	}
 }
 
@@ -182,8 +182,11 @@ void ble_init(void)
 
 void user_init(void)
 {
-	mcu_gpio_user_init();
-	mcu_adc_user_init();
+	static uint8 wakeCnt;
+	if(!wakeCnt++)
+	{// 唤醒256次采集一次温度
+		temper_sampleTemper();
+	}
 }
 
 int main(void)

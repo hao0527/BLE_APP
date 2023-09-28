@@ -22,7 +22,7 @@
 #include "app.h"
 #include "stack_svc_api.h"
 
-#include "mcu_hal.h"
+#include "temperature.h"
 
 static struct app_proj_template_env_tag app_proj_template_env;
 void app_proj_template_init(void)
@@ -112,9 +112,8 @@ static int proj_template_server_peer_write_data_ind_handler(ke_msg_id_t const ms
 	
 	if(0xf3 == param->packet[0])
 	{
-		uint8 len = sprintf((char*)Sendata, "%.3f, %.3f", 
-							mcu_adc_get_voltage(MCU_P12_ADC_CH2), 
-							mcu_adc_get_voltage(MCU_P13_ADC_CH3));
+		float temper = TEMPER_VALUE_TO_C(temper_getTemperValue(temper_getTemperCnt()));
+		uint8 len = sprintf((char*)Sendata, "temper = %.2f", temper);
 		app_proj_template_send_value(PROJ_TEMPLATE_IDX_CTRL_VAL, Sendata, len);
 	}
 #endif
