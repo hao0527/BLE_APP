@@ -10,13 +10,13 @@ extern "C" {
 #endif
 
 typedef unsigned char      uint8;   //  8 bits
-typedef char               int8;    //  8 bits
+typedef signed char        int8;    //  8 bits
 typedef unsigned short     uint16;  // 16 bits
-typedef short              int16;   // 16 bits
+typedef signed short       int16;   // 16 bits
 typedef unsigned long      uint32;  // 32 bits
-typedef long               int32;   // 32 bits
+typedef signed long        int32;   // 32 bits
 typedef unsigned long long uint64;  // 64 bits
-typedef long long          int64;   // 64 bits
+typedef signed long long   int64;   // 64 bits
 
 /*---------------------- BLE Baseband Register -------------------------*/
 
