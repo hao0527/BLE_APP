@@ -1,10 +1,12 @@
 #include "temperature.h"
 #include "mcu_hal.h"
+#include "panip_config.h"
 #include <string.h>
 #include <math.h>
 
 static int8 temperTable[TEMPER_TABLE_MAX_LEN];	// 存放历史温度数据
 static uint16 temperCnt;	// 采温度完成次数
+static uint8 temperTimerCnt;	// 定时器回调进入计数
 
 /**
  * @brief 保存温度值到temperTable，同时更新temperCnt
@@ -80,12 +82,19 @@ uint16 temper_getTemperCnt(void)
 
 /**
  * @brief 以阻塞的方式采集一次温度，后存储
+ * @note 定时器回调会1min调一次采集温度，每过SAMPLE_TEMPER_PERIOD次真正采样一次
  */
 void temper_sampleTemper(void)
 {
 	float v;
 	int8 t;
-
+	
+	if(temperTimerCnt++)
+	{// 每过SAMPLE_TEMPER_PERIOD次真正采样一次
+		temperTimerCnt %= SAMPLE_TEMPER_PERIOD;
+		return;
+	}
+	
 	mcu_gpio_user_init();
 	mcu_gpio_en_ldo(TRUE);
 	mcu_adc_user_init();
@@ -102,6 +111,7 @@ void temper_sampleTemper(void)
 void temper_resetInit(void)
 {
 	temperCnt = 0;
+	temperTimerCnt = 0;
 	memset(temperTable, 0, sizeof(temperTable));
 	temper_sampleTemper();	// 阻塞采集一次温度
 }

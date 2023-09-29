@@ -26,9 +26,8 @@ struct proj_template_env_tag proj_template_env;
 void proj_template_ini(void)
 {
 	memset(&proj_template_env,0x00,sizeof(proj_template_env));
-	proj_template_get_flash_cmd();
 	
-	temper_resetInit();
+	proj_template_get_flash_cmd();
 }
 
 void proj_template_start_advertising(void)
