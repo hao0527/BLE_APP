@@ -53,6 +53,10 @@
 #include "app_ota.h"
 #endif
 
+#if (PROJ_SAMPLE_TEMPER)
+#include "temperature.h"
+#endif
+
 #define DBG_APP_TASK(x)         //printf x
 #define DBG_APP_TASK_FUNC()     //printf("%s\n", __func__)
 #include "stack_svc_api.h"
@@ -799,6 +803,19 @@ static int appm_msg_handler(ke_msg_id_t const msgid,
     return (msg_pol);
 }
 
+#if (PROJ_SAMPLE_TEMPER)
+static int app_sample_temper_handler(ke_msg_id_t const msgid,
+                                     void const *param,
+                                     ke_task_id_t const dest_id,
+                                     ke_task_id_t const src_id)
+{
+	temper_sampleTemper();	// 阻塞采集一次温度
+	((ke_timer_set_handler)SVC_ke_timer_set)(APP_SAMPLE_TEMPER_TIMER, TASK_APP, SAMPLE_TEMPER_PERIOD);	// 开启下一次定时
+	return (KE_MSG_CONSUMED);
+}
+#endif
+
+
 /*
  * GLOBAL VARIABLES DEFINITION
  ****************************************************************************************
@@ -823,6 +840,10 @@ KE_MSG_HANDLER_TAB(appm)
     
 	#if(PROJ_THROUGHPUT)
 	{APP_TEST_TIMER,			(ke_msg_func_t)app_test_handler},	
+	#endif
+
+	#if(PROJ_SAMPLE_TEMPER)
+	{APP_SAMPLE_TEMPER_TIMER,	(ke_msg_func_t)app_sample_temper_handler},
 	#endif
 
     {GAPM_DEVICE_READY_IND,     (ke_msg_func_t)gapm_device_ready_ind_handler},	//gapm ready,reset stack

@@ -42,10 +42,6 @@
 #include "ota_server.h"
 #endif
 
-// user include
-#include "mcu_hal.h"
-#include "temperature.h"
-
 const app_info_t app_info __attribute__((at(APP_INFO_ADDR)))=
 {
 	.co_default_bdname = "proj_template",
@@ -177,16 +173,6 @@ void ble_init(void)
 	else
 	{   
 		ble_normal_reset_init();
-		temper_varInit();
-	}
-}
-
-void user_init(void)
-{
-	static uint8 wakeCnt;
-	if(!wakeCnt++)
-	{// 唤醒256次采集一次温度
-		temper_sampleTemper();
 	}
 }
 
@@ -194,7 +180,6 @@ int main(void)
 {
 	stack_sp_restore();
 	ble_init();
-	user_init();
 	ble_stack_process();
 }
 

@@ -17,6 +17,8 @@
 #include "proj_template_server.h"
 #include "stack_svc_api.h"
 
+#include "temperature.h"
+
 #define STORE_INFO_FLASH_ADDR 0x0003C000
 
 struct proj_template_env_tag proj_template_env;
@@ -24,8 +26,9 @@ struct proj_template_env_tag proj_template_env;
 void proj_template_ini(void)
 {
 	memset(&proj_template_env,0x00,sizeof(proj_template_env));
-	
 	proj_template_get_flash_cmd();
+	
+	temper_resetInit();
 }
 
 void proj_template_start_advertising(void)

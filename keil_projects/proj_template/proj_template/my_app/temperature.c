@@ -99,8 +99,9 @@ void temper_sampleTemper(void)
 /**
  * @brief 初次上电ram初始化，唤醒不需要调用
  */
-void temper_varInit(void)
+void temper_resetInit(void)
 {
 	temperCnt = 0;
 	memset(temperTable, 0, sizeof(temperTable));
+	temper_sampleTemper();	// 阻塞采集一次温度
 }

@@ -28,6 +28,14 @@ static struct app_proj_template_env_tag app_proj_template_env;
 void app_proj_template_init(void)
 {
 	memset(&app_proj_template_env, 0, sizeof(app_proj_template_env));
+	
+	#if(PROJ_SAMPLE_TEMPER)
+	/* 注意：配置定时器放在此函数里没问题，放在appm_init()外部有问题，会导致无法进定时回调！
+			函数调用关系：ble_normal_reset_init() -> user_code_start() -> appm_init() -> app_init_ind_func()
+			设置定时器放在appm_init()内部没问题，但是放在appm_init()外部就不行，
+			甚至把设置定时器放在appm_init()内部的最后一行可以，放在appm_init()执行完出来的下一行不行！*/
+	((ke_timer_set_handler)SVC_ke_timer_set)(APP_SAMPLE_TEMPER_TIMER, TASK_APP, SAMPLE_TEMPER_PERIOD);
+	#endif
 }
 
 
