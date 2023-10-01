@@ -38,6 +38,9 @@ enum
 	
 		//NTF / Indication  data to peer
 		PROJ_TEMPLATE_SERVER_WRITE_CMD,
+
+		// 温度周期采样定时器
+		APP_SAMPLE_TEMPER_TIMER,
 };
 
 
