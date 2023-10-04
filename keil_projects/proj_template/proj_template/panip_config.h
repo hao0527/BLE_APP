@@ -19,7 +19,7 @@
 #define	KEEP_ENC_CODE           (1)
 //Customer marco
 #define USER_PROJ_TEMPLATE      (1)
-#define PROJ_OTA                (1)
+#define PROJ_OTA                (0)
 
 // DSP Log enable
 #define DBG_SYS_EN              (0)

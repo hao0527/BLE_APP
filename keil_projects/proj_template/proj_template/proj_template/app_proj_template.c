@@ -57,7 +57,7 @@ void app_proj_template_add_server(void)
 
 	// Set parameters
 	db_cfg = (struct proj_template_server_db_cfg* ) req->param;
-	db_cfg->features = 0x1fff;
+	db_cfg->features = 0xffffffff;	// 注意：配置了gatt数据库，要配置这个掩码使能，32位都是1可以使能32个数据库配置
 
 	// Send the message
 	((ke_msg_send_handler)SVC_ke_msg_send)(req);
@@ -121,7 +121,7 @@ static int proj_template_server_peer_write_data_ind_handler(ke_msg_id_t const ms
 	{
 		float temper = TEMPER_VALUE_TO_C(temper_getTemperValue(temper_getTemperCnt()));
 		uint8 len = sprintf((char*)Sendata, "temper = %.2f", temper);
-		app_proj_template_send_value(PROJ_TEMPLATE_IDX_CTRL_VAL, Sendata, len);
+		app_proj_template_send_value(PROJ_TEMPLATE_IDX_S2C_VAL, Sendata, len);
 	}
 #endif
 	return (KE_MSG_CONSUMED);
