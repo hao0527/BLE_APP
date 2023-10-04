@@ -149,7 +149,7 @@ static int app_sample_temper_handler(ke_msg_id_t const msgid,
                                      ke_task_id_t const dest_id,
                                      ke_task_id_t const src_id)
 {
-	temper_sampleTemper();	// 阻塞采集一次温度
+	temper_sampleTemperTimerCb();	// 1分钟定时器回调函数，处理定时采温度任务
 	((ke_timer_set_handler)SVC_ke_timer_set)(APP_SAMPLE_TEMPER_TIMER, TASK_APP, 60*100);	// 开启下一次定时
 	return (KE_MSG_CONSUMED);
 }

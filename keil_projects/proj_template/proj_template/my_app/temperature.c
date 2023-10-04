@@ -60,7 +60,7 @@ static int8 adcVoltageToTemperValue(float voltage)
 /**
  * @brief 获取温度值
  * @param cnt 第几次采样
- * @return int8 温度值，0表示37度，返回-128(0x80)表示错误
+ * @return int8 温度值，0表示ZERO_TEMPER_VALUE_C度，返回-128(0x80)表示错误
  * @note 真实温度等于ZERO_TEMPER_VALUE_C+返回值*PRECISION_TEMPER_VALUE_C
  */
 int8 temper_getTemperValue(uint16 cnt)
@@ -68,7 +68,7 @@ int8 temper_getTemperValue(uint16 cnt)
 	if(cnt > temperCnt || cnt == 0 ||
 	   (temperCnt > TEMPER_TABLE_MAX_LEN && temperCnt - cnt >= TEMPER_TABLE_MAX_LEN))	// 判断是否近TEMPER_TABLE_MAX_LEN次
 		return 0x80;
-	return temperTable[(cnt - 1) % 500];
+	return temperTable[(cnt - 1) % TEMPER_TABLE_MAX_LEN];
 }
 
 /**
@@ -81,10 +81,10 @@ uint16 temper_getTemperCnt(void)
 }
 
 /**
- * @brief 以阻塞的方式采集一次温度，后存储
- * @note 定时器回调会1min调一次采集温度，每过SAMPLE_TEMPER_PERIOD次真正采样一次
+ * @brief 每调用SAMPLE_TEMPER_PERIOD次，阻塞采一次温度，后存储
+ * @note 定时器回调每1min调一次此接口
  */
-void temper_sampleTemper(void)
+void temper_sampleTemperTimerCb(void)
 {
 	float v;
 	int8 t;
@@ -106,6 +106,24 @@ void temper_sampleTemper(void)
 }
 
 /**
+ * @brief 阻塞采一次温度，不存储
+ */
+int8 temper_sampleTemper(void)
+{
+	float v;
+	int8 t;
+
+	mcu_gpio_user_init();
+	mcu_gpio_en_ldo(TRUE);
+	mcu_adc_user_init();
+	while(!mcu_adc_main());	// 阻塞到采样完成
+	mcu_gpio_en_ldo(FALSE);
+	v = mcu_adc_get_voltage(MCU_P12_ADC_CH2);
+	t = adcVoltageToTemperValue(v);
+	return t;
+}
+
+/**
  * @brief 初次上电ram初始化，唤醒不需要调用
  */
 void temper_resetInit(void)
@@ -113,5 +131,5 @@ void temper_resetInit(void)
 	temperCnt = 0;
 	temperTimerCnt = 0;
 	memset(temperTable, 0, sizeof(temperTable));
-	temper_sampleTemper();	// 阻塞采集一次温度
+	temper_sampleTemperTimerCb();	// 阻塞采集一次温度
 }

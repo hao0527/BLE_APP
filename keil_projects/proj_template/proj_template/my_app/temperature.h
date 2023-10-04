@@ -3,6 +3,8 @@
 
 #include "panble.h"
 
+// 采集温度周期，单位(1min)
+#define SAMPLE_TEMPER_PERIOD        15
 // TemperTable数组大小
 #define TEMPER_TABLE_MAX_LEN		500
 // TemperValue 0值温度 （摄氏度）
@@ -14,7 +16,8 @@
 
 int8 temper_getTemperValue(uint16 cnt);
 uint16 temper_getTemperCnt(void);
-void temper_sampleTemper(void);
+void temper_sampleTemperTimerCb(void);
+int8 temper_sampleTemper(void);
 void temper_resetInit(void);
 
 #endif //__TEMPERATURE_H_
