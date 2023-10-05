@@ -20,8 +20,11 @@ static void saveTemperValue(int8 value)
 
 #define TEMPER_VALUE_MAX_CFG 100
 #define TEMPER_VALUE_MIN_CFG -100
+#define TEMPER_VALUE_OVER_MAX 127
+#define TEMPER_VALUE_LESS_MIN -128
 /**
- * @brief 真实温度 （摄氏度） 转 TemperValue
+ * @brief 真实温度 （摄氏度） 转 TemperValue，超过最大最小显示特殊值
+ * @param value 真实温度
  * @return int8 返回TemperValue
  */
 static inline int8 C_TO_TEMPER_VALUE(float value)
@@ -30,9 +33,9 @@ static inline int8 C_TO_TEMPER_VALUE(float value)
 	// round函数 四舍五入
 	t = (int32)round((value - ZERO_TEMPER_VALUE_C) / PRECISION_TEMPER_VALUE_C);
 	if(t > TEMPER_VALUE_MAX_CFG)
-		t = TEMPER_VALUE_MAX_CFG;
+		t = TEMPER_VALUE_OVER_MAX;
 	else if(t < TEMPER_VALUE_MIN_CFG)
-		t = TEMPER_VALUE_MIN_CFG;
+		t = TEMPER_VALUE_LESS_MIN;
 	return (int8)t;
 }
 
@@ -41,7 +44,7 @@ static inline int8 C_TO_TEMPER_VALUE(float value)
 /**
  * @brief adc电压值到温度值的转换
  * @attention 温度值不是真实温度，是int8类型的，真实温度等于ZERO_TEMPER_VALUE_C+温度值*PRECISION_TEMPER_VALUE_C
- * @param voltage adc电压值
+ * @param voltage adc电压值(V)
  * @return int8 返回温度值
  */
 static int8 adcVoltageToTemperValue(float voltage)
@@ -57,17 +60,18 @@ static int8 adcVoltageToTemperValue(float voltage)
 	return temperValue;
 }
 
+#define TEMPER_VALUE_ERROR -127
 /**
  * @brief 获取温度值
  * @param cnt 第几次采样
- * @return int8 温度值，0表示ZERO_TEMPER_VALUE_C度，返回-128(0x80)表示错误
+ * @return int8 温度值，0表示ZERO_TEMPER_VALUE_C度，返回TEMPER_VALUE_ERROR表示错误
  * @note 真实温度等于ZERO_TEMPER_VALUE_C+返回值*PRECISION_TEMPER_VALUE_C
  */
 int8 temper_getTemperValue(uint16 cnt)
 {
 	if(cnt > temperCnt || cnt == 0 ||
 	   (temperCnt > TEMPER_TABLE_MAX_LEN && temperCnt - cnt >= TEMPER_TABLE_MAX_LEN))	// 判断是否近TEMPER_TABLE_MAX_LEN次
-		return 0x80;
+		return TEMPER_VALUE_ERROR;
 	return temperTable[(cnt - 1) % TEMPER_TABLE_MAX_LEN];
 }
 
