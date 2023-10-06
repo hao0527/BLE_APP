@@ -14,6 +14,25 @@
 // TemperValue 转 真实温度 （摄氏度）
 #define TEMPER_VALUE_TO_C(value)	(ZERO_TEMPER_VALUE_C + PRECISION_TEMPER_VALUE_C * value)
 
+#pragma pack(1)
+typedef struct TemperCfg
+{
+	uint16 zeroTemperValue;
+	uint16 precisionTemperValue;
+	uint16 temperTableMaxLen;
+	uint8 sampleTemperPeriod;
+}TemperCfg_t;
+
+typedef struct TemperReadCfg
+{
+	uint16 startCnt;	// 从第几次采样开始读取
+	uint16 readLen;		// 读取的长度
+}TemperReadCfg_t;
+#pragma pack()
+
+extern const TemperCfg_t g_temperCfg;
+extern TemperReadCfg_t g_temperReadCfg;
+
 int8 temper_getTemperValue(uint16 cnt);
 uint16 temper_getTemperCnt(void);
 void temper_sampleTemperTimerCb(void);

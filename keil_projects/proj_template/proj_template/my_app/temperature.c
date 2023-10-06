@@ -4,6 +4,15 @@
 #include <string.h>
 #include <math.h>
 
+const TemperCfg_t g_temperCfg = {
+	.zeroTemperValue = ZERO_TEMPER_VALUE_C * 1000,
+	.precisionTemperValue = PRECISION_TEMPER_VALUE_C * 1000,
+	.temperTableMaxLen = TEMPER_TABLE_MAX_LEN,
+	.sampleTemperPeriod = SAMPLE_TEMPER_PERIOD,
+};
+
+TemperReadCfg_t g_temperReadCfg;
+
 static int8 temperTable[TEMPER_TABLE_MAX_LEN];	// 存放历史温度数据
 static uint16 temperCnt;	// 采温度完成次数
 static uint8 temperTimerCnt;	// 定时器回调进入计数
@@ -134,6 +143,7 @@ void temper_resetInit(void)
 {
 	temperCnt = 0;
 	temperTimerCnt = 0;
+	memset(&g_temperReadCfg, 0, sizeof(g_temperReadCfg));
 	memset(temperTable, 0, sizeof(temperTable));
 	temper_sampleTemperTimerCb();	// 阻塞采集一次温度
 }
