@@ -129,105 +129,6 @@ __STATIC int gattc_write_req_ind_handler(ke_msg_id_t const msgid,
 				env->client_cfg_s2c[conidx] = co_read16p(&param->value[0]);
 			}
 			break;
-
-			// case PROJ_TEMPLATE_IDX_CTRL_CLIENT_CFG:
-			// {
-			// 	env->client_cfg_ctrl[conidx] = co_read16p(&param->value[0]);
-			// }
-			// break;
-			
-			// case PROJ_TEMPLATE_IDX_CTRL_VAL:
-			// {
-			// 	if ((0x0002 == param->length) 
-			// 		&& (0x01 == param->value[0]) && (0x01 == param->value[1]))
-			// 	{
-			// 		// disconnect
-			// 		appm_disconnect();
-			// 	}
-			// 	else if ((0x0004 == param->length) 
-			// 		&& (0x02 == param->value[0]) && (0x02 == param->value[1]))
-			// 	{
-			// 		// set connection interval
-			// 		uint16_t intv = co_read16p(&param->value[2]);
-			// 		uint16_t tout = intv * 10;
-					
-			// 		if ( intv  > 0x0C80 )
-			// 		{
-			// 			intv = 0x0C80;
-			// 		}
-					
-			// 		if (tout > 3200)
-			// 		{
-			// 			tout = 3200;
-			// 		}
-
-			// 		struct gapc_conn_param conn_param;
-			// 		conn_param.intv_min = intv;
-			// 		conn_param.intv_max = intv;
-			// 		conn_param.latency	= 0;
-			// 		conn_param.time_out = tout;
-			// 		appm_update_param(&conn_param);
-			// 	}
-			// 	else if ((0x0002 == param->length) 
-			// 		&& (0x03 == param->value[0]) && (0x03 == param->value[1]))
-			// 	{
-			// 		// read connection interval
-			// 		struct gattc_send_evt_cmd *req = KE_MSG_ALLOC_DYN(GATTC_SEND_EVT_CMD,
-			// 														  KE_BUILD_ID(TASK_GATTC, conidx), 
-			// 														  env->prf_env.prf_task,
-			// 														  gattc_send_evt_cmd, 
-			// 														  4);
-			// 		// Fill in the parameter structure
-			// 		req->operation = GATTC_NOTIFY;
-			// 		req->seq_num = 0x3;
-			// 		req->handle  = proj_template_server_get_att_handle(0, att_idx);
-			// 		req->length  = 4;
-			// 		req->value[0] = 0x03;
-			// 		req->value[1] = 0x03;
-			// 		req->value[2] = 20;
-			// 		req->value[3] = 0;
-
-			// 		((ke_msg_send_handler)SVC_ke_msg_send)(req);
-			// 	}
-			// 	else if ((0x0004 == param->length) 
-			// 		&& (0x04 == param->value[0]) && (0x04 == param->value[1]))
-			// 	{
-			// 		//gattc_exc_mtu_cmd(TASK_GATTC, conidx);
-			// 		struct gattc_exc_mtu_cmd *cmd =  KE_MSG_ALLOC(GATTC_EXC_MTU_CMD,
-			// 		KE_BUILD_ID(TASK_GATTC,conidx ), TASK_APP,
-			// 		gattc_exc_mtu_cmd);
-			
-			// 		cmd->operation = GATTC_MTU_EXCH;
-			// 		cmd->seq_num = 0x1;
-
-			// 		((ke_msg_send_handler)SVC_ke_msg_send)(cmd);
-			// 	}
-			// 	else if ((0x0002 == param->length) 
-			// 		&& (0x05 == param->value[0]) && (0x05 == param->value[1]))
-			// 	{
-			// 		// read att mtu
-			// 		uint16_t mtu = gattc_get_mtu(conidx);
-			// 		printf("read mtu %d\n", mtu);
-
-			// 		struct gattc_send_evt_cmd *req = KE_MSG_ALLOC_DYN(GATTC_SEND_EVT_CMD,
-			// 														  KE_BUILD_ID(TASK_GATTC, conidx), 
-			// 														  env->prf_env.prf_task,
-			// 														  gattc_send_evt_cmd, 
-			// 														  4);
-			// 		// Fill in the parameter structure
-			// 		req->operation = GATTC_NOTIFY;
-			// 		req->seq_num = 0x3;
-			// 		req->handle  = proj_template_server_get_att_handle(0, att_idx);
-			// 		req->length  = 4;
-			// 		req->value[0] = 0x05;
-			// 		req->value[1] = 0x05;
-			// 		req->value[2] = mtu;
-			// 		req->value[3] = mtu >> 8;
-
-			// 		((ke_msg_send_handler)SVC_ke_msg_send)(req);
-			// 	}
-			// }
-			// break;
 			
 			case PROJ_TEMPLATE_IDX_C2S_VAL:
 			{
@@ -310,15 +211,6 @@ __STATIC int gattc_read_req_ind_handler(ke_msg_id_t const msgid, struct gattc_re
 			}
 			break;
 
-			// case PROJ_TEMPLATE_IDX_CTRL_USER_DESC:
-			// {
-			// 	length = PROJ_TEMPLATE_CTRL_USER_DESC_VAL_LEN;
-			// }
-			// break;
-			// case PROJ_TEMPLATE_IDX_CTRL_CLIENT_CFG:
-			// {
-			// 	length = PROJ_TEMPLATE_CTRL_CLIENT_CFG_LEN;
-			// }
 			default:
 			{
 				status = PRF_APP_ERROR;
@@ -354,18 +246,6 @@ __STATIC int gattc_read_req_ind_handler(ke_msg_id_t const msgid, struct gattc_re
 				memcpy(cfm->value, PROJ_TEMPLATE_C2S_USER_DESC_VAL, PROJ_TEMPLATE_C2S_USER_DESC_VAL_LEN);
 			}
 			break;
-
-			// case PROJ_TEMPLATE_IDX_CTRL_USER_DESC:
-			// {
-			// 	memcpy(cfm->value, PROJ_TEMPLATE_CTRL_USER_DESC_VAL, PROJ_TEMPLATE_CTRL_USER_DESC_VAL_LEN);
-			// }
-			// break;
-
-			// case PROJ_TEMPLATE_IDX_CTRL_CLIENT_CFG:
-			// {
-			// 	memcpy(cfm->value, &env->client_cfg_ctrl[conidx], PROJ_TEMPLATE_CTRL_CLIENT_CFG_LEN);
-			// }
-			// break;
 			
 			default:
 			{

@@ -80,9 +80,6 @@ enum
 #define PROJ_TEMPLATE_S2C_CLIENT_CFG_LEN        sizeof(uint16_t)
 #define PROJ_TEMPLATE_C2S_USER_DESC_VAL         "Client To Server"
 #define PROJ_TEMPLATE_C2S_USER_DESC_VAL_LEN     sizeof(PROJ_TEMPLATE_C2S_USER_DESC_VAL)
-#define PROJ_TEMPLATE_CTRL_USER_DESC_VAL        "Control"
-#define PROJ_TEMPLATE_CTRL_USER_DESC_VAL_LEN    sizeof(PROJ_TEMPLATE_CTRL_USER_DESC_VAL)
-#define PROJ_TEMPLATE_CTRL_CLIENT_CFG_LEN       sizeof(uint16_t)
 
 
 /*
@@ -100,7 +97,6 @@ struct proj_template_server_env_tag
 	uint16_t   start_hdl;
 	ke_state_t state[PROJ_TEMPLATE_SERVER_IDX_MAX];
 	uint16_t   client_cfg_s2c[BLE_CONNECTION_MAX];
-	uint16_t   client_cfg_ctrl[BLE_CONNECTION_MAX];
 };
 
 extern struct proj_template_server_env_tag proj_template_server_env;

@@ -129,7 +129,6 @@ static void proj_template_server_create(struct prf_task_env* env, uint8_t conidx
 	struct proj_template_server_env_tag* proj_template_server_env = (struct proj_template_server_env_tag*) env->env;
 	ASSERT_ERR(conidx < BLE_CONNECTION_MAX);
 	proj_template_server_env->client_cfg_s2c[conidx]  = PRF_CLI_STOP_NTFIND;
-	proj_template_server_env->client_cfg_ctrl[conidx] = PRF_CLI_STOP_NTFIND;
 }
 
 /**
@@ -148,7 +147,6 @@ static void proj_template_server_cleanup(struct prf_task_env* env, uint8_t conid
 	ASSERT_ERR(conidx < BLE_CONNECTION_MAX);
 	// force notification config to zero when peer device is disconnected
 	proj_template_server_env->client_cfg_s2c[conidx]  = PRF_CLI_STOP_NTFIND;
-	proj_template_server_env->client_cfg_ctrl[conidx] = PRF_CLI_STOP_NTFIND;
 }
 
 /// BASS Task interface required by profile manager
