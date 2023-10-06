@@ -102,11 +102,10 @@ void temper_sampleTemperTimerCb(void)
 	float v;
 	int8 t;
 	
-	if(temperTimerCnt++)
-	{// 每过SAMPLE_TEMPER_PERIOD次真正采样一次
-		temperTimerCnt %= SAMPLE_TEMPER_PERIOD;
+	if(++temperTimerCnt >= SAMPLE_TEMPER_PERIOD)
+		temperTimerCnt = 0;	// 每过SAMPLE_TEMPER_PERIOD次真正采样一次
+	else
 		return;
-	}
 	
 	mcu_gpio_user_init();
 	mcu_gpio_en_ldo(TRUE);
