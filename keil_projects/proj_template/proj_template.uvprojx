@@ -200,7 +200,7 @@
             <NoZi1>0</NoZi1>
             <NoZi2>0</NoZi2>
             <NoZi3>0</NoZi3>
-            <NoZi4>0</NoZi4>
+            <NoZi4>1</NoZi4>
             <NoZi5>0</NoZi5>
             <Ro1Chk>0</Ro1Chk>
             <Ro2Chk>0</Ro2Chk>
@@ -313,7 +313,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>4</Optim>
             <oTime>1</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -339,7 +339,7 @@
               <MiscControls>--c99 --thumb -c --bss_threshold=0</MiscControls>
               <Define>__CC_ARM</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\src\application\inc;..\..\src\application\dbg\api;..\..\src\platform\arch\inc;..\..\src\platform\build\reg;..\..\src\platform\driver\inc;..\..\src\prf\prf_ctl\inc;..\..\src\stack\hci;..\..\src\stack\inc;..\..\src\stack\gatt\attc;..\..\src\stack\gatt\attm;..\..\src\stack\gatt\atts;..\..\src\stack\gatt\gattc;..\..\src\stack\gatt\gattm;..\..\src\stack\hci;..\..\src\prf\profiles\anp\api;..\..\src\prf\profiles\bas\api;..\..\src\prf\profiles\blp\api;..\..\src\prf\profiles\cpp\api;..\..\src\prf\profiles\dis\api;..\..\src\prf\profiles\find\api;..\..\src\prf\profiles\glp\api;..\..\src\prf\profiles\hogp\api;..\..\src\prf\profiles\hrp\api;..\..\src\prf\profiles\htp\api;..\..\src\prf\profiles\lan\api;..\..\src\prf\profiles\pasp\api;..\..\src\prf\profiles\prox\api;..\..\src\prf\profiles\rscp\api;..\..\src\prf\profiles\tip\api;..\..\src\stack\softdevice;..\..\src\application\ota;.\proj_template\proj_template;.\proj_template\proj_template\proj_template_server;..\proj_template;.\proj_template;..\..\src\application\flash_manager\inc</IncludePath>
+              <IncludePath>..\..\src\application\inc;..\..\src\application\dbg\api;..\..\src\platform\arch\inc;..\..\src\platform\build\reg;..\..\src\platform\driver\inc;..\..\src\prf\prf_ctl\inc;..\..\src\stack\hci;..\..\src\stack\inc;..\..\src\stack\gatt\attc;..\..\src\stack\gatt\attm;..\..\src\stack\gatt\atts;..\..\src\stack\gatt\gattc;..\..\src\stack\gatt\gattm;..\..\src\stack\hci;..\..\src\prf\profiles\anp\api;..\..\src\prf\profiles\bas\api;..\..\src\prf\profiles\blp\api;..\..\src\prf\profiles\cpp\api;..\..\src\prf\profiles\dis\api;..\..\src\prf\profiles\find\api;..\..\src\prf\profiles\glp\api;..\..\src\prf\profiles\hogp\api;..\..\src\prf\profiles\hrp\api;..\..\src\prf\profiles\htp\api;..\..\src\prf\profiles\lan\api;..\..\src\prf\profiles\pasp\api;..\..\src\prf\profiles\prox\api;..\..\src\prf\profiles\rscp\api;..\..\src\prf\profiles\tip\api;..\..\src\stack\softdevice;..\..\src\application\ota;.\proj_template\proj_template;.\proj_template\proj_template\proj_template_server;..\proj_template;.\proj_template;..\..\src\application\flash_manager\inc;.\proj_template\mcu_hal;.\proj_template\my_app</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -717,6 +717,26 @@
               <FileName>queue.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\application\flash_manager\src\queue.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mcu_hal</GroupName>
+          <Files>
+            <File>
+              <FileName>mcu_hal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\proj_template\mcu_hal\mcu_hal.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>my_app</GroupName>
+          <Files>
+            <File>
+              <FileName>temperature.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\proj_template\my_app\temperature.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2126,6 +2146,26 @@
               <FileName>queue.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\application\flash_manager\src\queue.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mcu_hal</GroupName>
+          <Files>
+            <File>
+              <FileName>mcu_hal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\proj_template\mcu_hal\mcu_hal.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>my_app</GroupName>
+          <Files>
+            <File>
+              <FileName>temperature.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\proj_template\my_app\temperature.c</FilePath>
             </File>
           </Files>
         </Group>

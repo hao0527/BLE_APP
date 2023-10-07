@@ -16,15 +16,15 @@
 #define	KEEP_ENC_CODE           (1)
 //Customer marco
 #define USER_PROJ_TEMPLATE      (1)
-#define PROJ_OTA                (1)
+#define PROJ_OTA                (0)
 
 // DSP Log enable
 #define DBG_SYS_EN              (0)
 
-#define ENABLE_UART0			(1)
+#define ENABLE_UART0			(0)
 #define ENABLE_UART1			(1)
 #define USE_EXT_32K 	        (0) //macro of use external 32k 		
-#define SLEEP_EN		        (0) //maro of whether to use low power
+#define SLEEP_EN		        (1) //maro of whether to use low power
 #define PN102B			        (1)
 #define SET_CUSTOME_ADDR		(1)
 #if(SLEEP_EN == 1)

@@ -82,7 +82,7 @@ void UART0_Handler(void)
 			{
 				if((USART_RX_CNT >1) && (sys_ble_conn_flag == 1))
 				{
-					app_proj_template_send_value(PROJ_TEMPLATE_IDX_C2S_VAL,USART_RX_BUF,USART_RX_CNT);
+					app_proj_template_send_value(PROJ_TEMPLATE_IDX_S2C_VAL,USART_RX_BUF,USART_RX_CNT);
 				}
 				USART_RX_CNT = 0;
 			}

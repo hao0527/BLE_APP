@@ -17,6 +17,8 @@
 #include "proj_template_server.h"
 #include "stack_svc_api.h"
 
+#include "temperature.h"
+
 #define STORE_INFO_FLASH_ADDR 0x0003C000
 
 struct proj_template_env_tag proj_template_env;
