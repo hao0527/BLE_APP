@@ -27,8 +27,8 @@ static void saveTemperValue(int8 value)
 	temperCnt++;
 }
 
-#define TEMPER_VALUE_MAX_CFG 100
-#define TEMPER_VALUE_MIN_CFG -100
+#define TEMPER_VALUE_MAX_CFG 120
+#define TEMPER_VALUE_MIN_CFG -120
 #define TEMPER_VALUE_OVER_MAX 127
 #define TEMPER_VALUE_LESS_MIN -128
 /**
