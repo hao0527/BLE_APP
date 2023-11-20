@@ -50,6 +50,7 @@ extern uint8_t wakeup_cnt;
 extern uint8_t sys_power_flag;
 extern uint8_t sys_sleep_flag;
 extern uint8_t sys_ble_conn_flag;
+extern bool ble_has_been_connected;
 extern uint16_t USART_RX_CNT;
 extern uint8_t  USART_RX_BUF[USART_REC_LEN];
 
@@ -80,7 +81,7 @@ extern void rf_dev_cal_init_handler(void);
 #define APP_INFO_ADDR			0x00016800
 #define APP_VAR_ADDR 			0x20003800
 
-//appÖĞµÄºê
+//appä¸­çš„å®
 typedef struct __app_info_t
 {
 	/// Default Device Name
@@ -94,7 +95,7 @@ typedef struct __app_info_t
 }app_info_t;
 extern const app_info_t app_info __attribute__((at(APP_INFO_ADDR)));
 
-//appÖĞµÄ±äÁ¿
+//appä¸­çš„å˜é‡
 typedef struct __app_var_t
 {
 	uint8_t default_tx_power;
@@ -104,7 +105,7 @@ typedef struct __app_var_t
 	uint8_t Gpio_retain_en:1;
 	
 	uint8_t rf_close_en:1;
-	uint16_t Wakeup_int;	//rf¹Ø±Õºó×Ô¶¨Òå»½ĞÑ¼ä¸ô£¬unit 625us
+	uint16_t Wakeup_int;	//rfå…³é—­åè‡ªå®šä¹‰å”¤é†’é—´éš”ï¼Œunit 625us
 	
 	 /// Default BD address,device mac addr
 	struct bd_addr co_default_bdaddr;

@@ -26,6 +26,7 @@ uint8_t wakeup_cnt;				//休眠唤醒的计数，unit，连接间隔或广播间隔。
 uint8_t sys_power_flag;			//为1,关闭32k,系统完全休眠。为其他，不关闭
 uint8_t sys_sleep_flag;			//为1,系统进入低功耗。为0，系统唤醒。
 uint8_t sys_ble_conn_flag;      //1,connect;0,disconnect
+bool ble_has_been_connected;		// TRUE: 已被连接过 FALSE: 未被连接过
 uint16_t USART_RX_CNT;
 uint8_t  USART_RX_BUF[USART_REC_LEN];
 
@@ -124,6 +125,7 @@ void sys_clear_global_var(void)
 	sys_power_flag = 0;
 	sys_sleep_flag = 0;
 	sys_ble_conn_flag = 0;
+	ble_has_been_connected = FALSE;
 	app_var.Wakeup_int = 0;
 	app_var.rf_close_en = RF_CLOSE_EN;	
 	app_var.Gpio_retain_en = GPIO_RETAIN_EN;

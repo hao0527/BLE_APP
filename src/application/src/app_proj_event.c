@@ -223,6 +223,11 @@ void app_connection_req_ind_func ( uint8_t conidx, struct gapc_connection_req_in
 	#endif
     sys_ble_conn_flag = 1;
     
+	#if PROJ_TEMPER
+	if(ble_has_been_connected == FALSE)
+		ble_has_been_connected = TRUE;	// 已被连接过
+	#endif
+
     return;
 }
 
