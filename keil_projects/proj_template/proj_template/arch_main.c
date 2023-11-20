@@ -42,6 +42,8 @@
 #include "ota_server.h"
 #endif
 
+#include "mcu_hal.h"
+
 const app_info_t app_info __attribute__((at(APP_INFO_ADDR)))=
 {
 	.co_default_bdname = "proj_template",
@@ -142,6 +144,12 @@ void ble_stack_process()
 			// Check if the processor clock can be gated
 			if(((bleip_sleep_handler)SVC_bleip_sleep)())
 			{
+				if(!ble_has_been_connected)
+				{
+					mcu_led_light(TRUE);
+					SYS_delay_10nop(36000);	// Լ50ms
+					mcu_led_light(FALSE);
+				}
 				CLK_PowerDown();
 				#if(GPIO_RETAIN_EN)
 				if(sys_sleep_flag == 1)
