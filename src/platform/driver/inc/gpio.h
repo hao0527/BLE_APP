@@ -368,8 +368,8 @@ typedef enum
 
 typedef enum
 {
-    GPIO_HIGH_LEVEL = 0x00,
-    GPIO_LOW_LEVEL  = 0x01,
+    GPIO_LOW_LEVEL = 0x00,
+    GPIO_HIGH_LEVEL  = 0x01,
 } GPIO_VALUE_T;
 void GPIO_SetMode(GPIO_T *gpio, uint32_t u32PinMask, uint32_t u32Mode);
 void GPIO_EnableInt(GPIO_T *gpio, uint32_t u32Pin, uint32_t u32IntAttribs);

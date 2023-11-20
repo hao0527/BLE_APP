@@ -13,8 +13,15 @@ void mcu_gpio_user_init(void)
 	GPIO_ENABLE_DIGITAL_PATH(P1, BIT0);
 	SYS->P1_MFP &= ~(SYS_MFP_P10_Msk);
 	SYS->P1_MFP |= SYS_MFP_P10_GPIO;
-	GPIO_InitOutput(P1, BIT0, GPIO_HIGH_LEVEL);
+	GPIO_InitOutput(P1, BIT0, GPIO_LOW_LEVEL);	// 需注意：原本库的GPIO_LOW_LEVEL有误，正确应该是 GPIO_LOW_LEVEL=0
 	GPIO_ClearBits(P1, BIT0);	// ldo 默认不开
+
+	GPIO_PullUp(P1, BIT4, GPIO_PULLUP_ENABLE);
+	GPIO_ENABLE_DIGITAL_PATH(P1, BIT4);
+	SYS->P1_MFP &= ~(SYS_MFP_P14_Msk);
+	SYS->P1_MFP |= SYS_MFP_P14_GPIO;
+	GPIO_InitOutput(P1, BIT4, GPIO_HIGH_LEVEL);	// 需注意：原本库的GPIO_HIGH_LEVEL有误，正确应该是 GPIO_HIGH_LEVEL=1
+	GPIO_SetBits(P1, BIT4);	// led 默认不亮
 }
 
 void mcu_gpio_en_ldo(bool en)
@@ -23,6 +30,14 @@ void mcu_gpio_en_ldo(bool en)
 		GPIO_SetBits(P1, BIT0);		// ldo en 拉高
 	else
 		GPIO_ClearBits(P1, BIT0);	// ldo en 拉低
+}
+
+void mcu_led_light(bool light)
+{
+	if(light)
+		GPIO_ClearBits(P1, BIT4);	// led 亮
+	else
+		GPIO_SetBits(P1, BIT4);		// led 灭
 }
 
 ////////////////////////////////////////////adc_driver/////////////////////////////////////////////
