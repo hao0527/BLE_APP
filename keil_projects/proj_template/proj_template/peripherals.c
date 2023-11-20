@@ -16,6 +16,8 @@
 #include "dbg_sys.h"
 #include "stack_svc_api.h"
 
+#include "mcu_hal.h"
+
 /*---------------------------------------------------------------------------------------------------------*/
 /* Global variables                                                                                        */
 #if(EXT_WAKEUP)
@@ -247,6 +249,8 @@ void periph_init(void)
 #endif
 
 //	SysTick_init(); 
+
+	mcu_gpio_user_init();	// ≥ı ºªØgpio
 }
 
 //πÿ±’32k

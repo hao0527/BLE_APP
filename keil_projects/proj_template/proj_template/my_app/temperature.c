@@ -107,7 +107,6 @@ void temper_sampleTemperTimerCb(void)
 	else
 		return;
 	
-	mcu_gpio_user_init();
 	mcu_gpio_en_ldo(TRUE);
 	mcu_adc_user_init();
 	while(!mcu_adc_main());	// 阻塞到采样完成
@@ -125,7 +124,6 @@ int8 temper_sampleTemper(void)
 	float v;
 	int8 t;
 
-	mcu_gpio_user_init();
 	mcu_gpio_en_ldo(TRUE);
 	mcu_adc_user_init();
 	while(!mcu_adc_main());	// 阻塞到采样完成

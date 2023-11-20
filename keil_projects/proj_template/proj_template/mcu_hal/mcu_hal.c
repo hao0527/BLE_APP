@@ -14,7 +14,7 @@ void mcu_gpio_user_init(void)
 	SYS->P1_MFP &= ~(SYS_MFP_P10_Msk);
 	SYS->P1_MFP |= SYS_MFP_P10_GPIO;
 	GPIO_InitOutput(P1, BIT0, GPIO_HIGH_LEVEL);
-	GPIO_SetBits(P1, BIT0);	// ldo en 拉高
+	GPIO_ClearBits(P1, BIT0);	// ldo 默认不开
 }
 
 void mcu_gpio_en_ldo(bool en)
