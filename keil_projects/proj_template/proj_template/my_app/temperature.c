@@ -93,13 +93,14 @@ uint16 temper_getTemperCnt(void)
 	return temperCnt;
 }
 
+#define VREF_VOLTAGE 1.25	/*有一个adc通道采集一个参考电压，用于校准温漂导致的adc误差*/
 /**
  * @brief 每调用SAMPLE_TEMPER_PERIOD次，阻塞采一次温度，后存储
  * @note 定时器回调每1min调一次此接口
  */
 void temper_sampleTemperTimerCb(void)
 {
-	float v;
+	float v, vref;
 	int8 t;
 	
 	if(++temperTimerCnt >= SAMPLE_TEMPER_PERIOD)
@@ -111,7 +112,9 @@ void temper_sampleTemperTimerCb(void)
 	mcu_adc_user_init();
 	while(!mcu_adc_main());	// 阻塞到采样完成
 	mcu_gpio_en_ldo(FALSE);
+	vref = mcu_adc_get_voltage(MCU_P13_ADC_CH3);
 	v = mcu_adc_get_voltage(MCU_P12_ADC_CH2);
+	v = v * VREF_VOLTAGE / vref;	// 校准温漂后的v
 	t = adcVoltageToTemperValue(v);
 	saveTemperValue(t);
 }
