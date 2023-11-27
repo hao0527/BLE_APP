@@ -251,8 +251,6 @@ void periph_init(void)
 #endif
 
 //	SysTick_init(); 
-
-	mcu_gpio_user_init();	// ≥ı ºªØgpio
 }
 
 //πÿ±’32k

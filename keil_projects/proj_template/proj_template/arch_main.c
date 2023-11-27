@@ -59,6 +59,8 @@ const app_info_t app_info __attribute__((at(APP_INFO_ADDR)))=
 void ble_sleep_wakeup_init()
 {
 	periph_init();																//System peripheral initialization
+	/* 注意：mcu_gpio_user_init()放在periph_init()内部的最后一行io保持不可以，放在periph_init()执行完出来的下一行才行！*/
+	mcu_gpio_user_init();	// 初始化gpio
 	
 	GLOBAL_INT_STOP();
 	
@@ -91,6 +93,8 @@ void ble_normal_reset_init()
 {
 	sys_clear_global_var();
 	periph_init();
+	/* 注意：mcu_gpio_user_init()放在periph_init()内部的最后一行io保持不可以，放在periph_init()执行完出来的下一行才行！*/
+	mcu_gpio_user_init();	// 初始化gpio
 	
 	printf("CPU @ %dHz,%s\n", SystemCoreClock, app_info.co_default_bdname);
 	#if(PROJ_OTA)
