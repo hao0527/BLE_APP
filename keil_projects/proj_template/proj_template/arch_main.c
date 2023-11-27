@@ -43,6 +43,7 @@
 #endif
 
 #include "mcu_hal.h"
+#include "led_app.h"
 
 const app_info_t app_info __attribute__((at(APP_INFO_ADDR)))=
 {
@@ -139,17 +140,14 @@ void ble_stack_process()
 		
 		if (app_var.default_sleep_en)
 		{
+			#if (GPIO_RETAIN_EN)
+			GPIO_Store();
+			#endif
 			GLOBAL_INT_DISABLE();
 			
 			// Check if the processor clock can be gated
 			if(((bleip_sleep_handler)SVC_bleip_sleep)())
 			{
-				if(!ble_has_been_connected)
-				{
-					mcu_led_light(TRUE);
-					SYS_delay_10nop(36000);	// Լ50ms
-					mcu_led_light(FALSE);
-				}
 				CLK_PowerDown();
 				#if(GPIO_RETAIN_EN)
 				if(sys_sleep_flag == 1)
@@ -186,6 +184,9 @@ void ble_init(void)
 
 int main(void)
 {
+#if (GPIO_RETAIN_EN)
+	GPIO_Retract();
+#endif
 	stack_sp_restore();
 	ble_init();
 	ble_stack_process();

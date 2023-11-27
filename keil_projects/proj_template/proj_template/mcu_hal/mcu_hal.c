@@ -20,8 +20,9 @@ void mcu_gpio_user_init(void)
 	GPIO_ENABLE_DIGITAL_PATH(P1, BIT4);
 	SYS->P1_MFP &= ~(SYS_MFP_P14_Msk);
 	SYS->P1_MFP |= SYS_MFP_P14_GPIO;
-	GPIO_InitOutput(P1, BIT4, GPIO_HIGH_LEVEL);	// 需注意：原本库的GPIO_HIGH_LEVEL有误，正确应该是 GPIO_HIGH_LEVEL=1
-	GPIO_SetBits(P1, BIT4);	// led 默认不亮
+	GPIO_SetMode(P1, BIT4, GPIO_MODE_OUTPUT);
+//	GPIO_InitOutput(P1, BIT4, GPIO_HIGH_LEVEL);	// 需注意：原本库的GPIO_HIGH_LEVEL有误，正确应该是 GPIO_HIGH_LEVEL=1
+//	GPIO_SetBits(P1, BIT4);	// led 默认不亮
 }
 
 void mcu_gpio_en_ldo(bool en)

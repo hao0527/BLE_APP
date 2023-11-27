@@ -35,7 +35,7 @@
 #endif
 #define XN297_MODE_EN			(0) //2.4g mode with xn297
 #define RF_CLOSE_EN				(0)	//使能后，mcu工作关闭rf。
-#define GPIO_RETAIN_EN			(0) //使能GPIO保持功能
+#define GPIO_RETAIN_EN			(1) //使能GPIO保持功能
 #define SPROM_DEC				(0)	//在PAN1020Tool给SPROM加密后，需要使能宏。保证flash程序的安全
 #define TEMP_CHANGE_CALIB		(0)	//Detect temperature change calibration two-point
 

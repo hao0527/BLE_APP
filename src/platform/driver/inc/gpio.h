@@ -388,6 +388,9 @@ static inline void GPIO_ClearBits(GPIO_T* GPIOx, uint32_t GPIO_Pin)
 }
 
 
+extern void GPIO_Store ( void );
+extern void GPIO_Retract ( void );
+
 /*@}*/ /* end of group PN102_GPIO_EXPORTED_FUNCTIONS */
 
 /*@}*/ /* end of group PN102_GPIO_Driver */
