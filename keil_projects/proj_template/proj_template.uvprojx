@@ -738,6 +738,11 @@
               <FileType>1</FileType>
               <FilePath>.\proj_template\my_app\temperature.c</FilePath>
             </File>
+            <File>
+              <FileName>led_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\proj_template\my_app\led_app.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2166,6 +2171,11 @@
               <FileName>temperature.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\proj_template\my_app\temperature.c</FilePath>
+            </File>
+            <File>
+              <FileName>led_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\proj_template\my_app\led_app.c</FilePath>
             </File>
           </Files>
         </Group>

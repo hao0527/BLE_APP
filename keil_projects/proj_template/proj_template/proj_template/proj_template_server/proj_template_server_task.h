@@ -41,6 +41,9 @@ enum
 
 		// 温度周期采样定时器
 		APP_SAMPLE_TEMPER_TIMER,
+
+		// led闪烁定时器
+		APP_LED_BLINK_TIMER,
 };
 
 
