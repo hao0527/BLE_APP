@@ -29,8 +29,9 @@ typedef struct KeyCfg {
 
 extern KeyInfo_t keyInfo;
 
-void key_init(KeyCfg_t cfg);
 void key_task(void);
 void key_scanTimerCB(void);
+
+void key_resetInit(void);
 
 #endif    //__KEY_APP_H_

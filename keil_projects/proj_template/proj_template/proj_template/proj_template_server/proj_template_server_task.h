@@ -44,6 +44,9 @@ enum
 
 		// led闪烁定时器
 		APP_LED_BLINK_TIMER,
+
+		// key扫描定时器
+		APP_KEY_SCAN_TIMER,
 };
 
 

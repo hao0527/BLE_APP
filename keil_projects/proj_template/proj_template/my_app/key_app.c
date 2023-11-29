@@ -39,9 +39,9 @@ static void key_scan(void)
 	}
 }
 
-void key_init(KeyCfg_t cfg)
+void key_init(KeyCfg_t* pCfg)
 {
-	pKeyCfg = &cfg;
+	pKeyCfg = pCfg;
 }
 
 /**
@@ -64,4 +64,20 @@ void key_task(void)
 void key_scanTimerCB(void)
 {
 	;
+}
+
+////////////////////////////////////////////key_user/////////////////////////////////////////////
+static KeyCfg_t KeyCfg;
+
+void key_EventCB(KeyEvents_t event, uint8 pressCnt)
+{
+	;
+}
+
+void key_resetInit(void)
+{
+	KeyCfg.keyEventCB = key_EventCB;
+	KeyCfg.pressIntervalTime = 200;
+	KeyCfg.timerPeriod = 10;
+	key_init(&KeyCfg);
 }
