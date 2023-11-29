@@ -23,6 +23,18 @@ void mcu_gpio_user_init(void)
 	GPIO_SetMode(P1, BIT4, GPIO_MODE_OUTPUT);
 //	GPIO_InitOutput(P1, BIT4, GPIO_HIGH_LEVEL);	// 需注意：原本库的GPIO_HIGH_LEVEL有误，正确应该是 GPIO_HIGH_LEVEL=1
 //	GPIO_SetBits(P1, BIT4);	// led 默认不亮
+
+	GPIO_PullUp(P1, BIT5, GPIO_PULLUP_ENABLE);
+	GPIO_ENABLE_DIGITAL_PATH(P1, BIT5);
+	SYS->P1_MFP &= ~(SYS_MFP_P15_Msk);
+	SYS->P1_MFP |= SYS_MFP_P15_GPIO;
+	GPIO_InitOutput(P1, BIT5, GPIO_HIGH_LEVEL);	// P15 是 POW_EN 上电后要一直拉高，关机时拉低
+
+	GPIO_PullUp(P3, BIT0, GPIO_PULLUP_DISABLE);	// 外部下拉，关闭内部上拉防止漏电流
+	GPIO_ENABLE_DIGITAL_PATH(P3, BIT0);
+	SYS->P1_MFP &= ~(SYS_MFP_P30_Msk);
+	SYS->P1_MFP |= SYS_MFP_P30_GPIO;
+	GPIO_SetMode(P3, BIT0, GPIO_MODE_INPUT);	// P30 是 KEY 高电平为按下
 }
 
 void mcu_gpio_en_ldo(bool en)
@@ -33,12 +45,28 @@ void mcu_gpio_en_ldo(bool en)
 		GPIO_ClearBits(P1, BIT0);	// ldo en 拉低
 }
 
-void mcu_led_light(bool light)
+void mcu_gpio_light_led(bool light)
 {
 	if(light)
 		GPIO_ClearBits(P1, BIT4);	// led 亮
 	else
 		GPIO_SetBits(P1, BIT4);		// led 灭
+}
+
+void mcu_gpio_en_pow(bool en)
+{
+	if(en)
+		GPIO_SetBits(P1, BIT5);		// POW_EN 拉高保持供电
+	else
+		GPIO_ClearBits(P1, BIT5);	// POW_EN 拉低下电
+}
+
+bool mcu_gpio_key_pressed(void)
+{
+	if(GPIO_GET_IN_DATA(P3) & BIT0)
+		return TRUE;	// 按下
+	else
+		return FALSE;	// 未按下
 }
 
 ////////////////////////////////////////////adc_driver/////////////////////////////////////////////

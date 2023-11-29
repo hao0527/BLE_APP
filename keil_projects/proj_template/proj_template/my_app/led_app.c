@@ -23,7 +23,7 @@ static void led_BlinkTimerOn(uint16 time)
 
 static void led_ctrlStatus(bool light)
 {
-	mcu_led_light(light);
+	mcu_gpio_light_led(light);
 	ledInfo.ledStatus = light;
 }
 
