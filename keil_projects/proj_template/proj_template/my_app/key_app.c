@@ -45,25 +45,63 @@ void key_init(KeyCfg_t* pCfg)
 }
 
 /**
- * @brief 检测首次按下
+ * @brief 监测首次按下
  * 
  */
-void key_task(void)
+void key_monitorPress(void)
 {
-	// 如果按键检测已开启，无需检测首次按下
-	if(keyInfo.scanStatus)
+	// 如果按键周期扫描已开启，无需检测首次按下
+	if(keyInfo.taskStatus)
 		return;
 	key_scan();
-	if (keyInfo.keyStatus == KEY_PRESSED && !keyInfo.scanStatus) {
+	if (keyInfo.keyStatus == KEY_PRESSED) {
 		// 首次按下 开启扫描按键定时器
 		key_scanTimerOn(pKeyCfg->timerPeriod);
-		keyInfo.scanStatus = TRUE;
+		keyInfo.taskStatus = TRUE;
+		keyInfo.pressTime = 0;	// 按下时间清0
+		keyInfo.pressCnt = 0;	// 连按次数清0
+		pKeyCfg->keyEventCB(KEY_PRESS, keyInfo.pressCnt);
 	}
+}
+
+void key_taskReset(void)
+{
+	key_scanTimerOff();
+	memset(&keyInfo, 0, sizeof(KeyInfo_t));
 }
 
 void key_scanTimerCB(void)
 {
-	;
+	uint8 lastKeyStatus = keyInfo.keyStatus;
+	uint16 lastPressTime = keyInfo.pressTime;
+	uint16 lastReleaseTime = keyInfo.releaseTime;
+	key_scan();
+
+	if (lastKeyStatus != keyInfo.keyStatus) {
+		if (keyInfo.keyStatus == KEY_PRESSED) {
+			// 检测到按下
+			keyInfo.pressTime = 0;
+			keyInfo.pressCnt++;
+			pKeyCfg->keyEventCB(KEY_PRESS, keyInfo.pressCnt);
+		} else {
+			// 检测到释放
+			keyInfo.releaseTime = 0;
+			pKeyCfg->keyEventCB(KEY_RELEASE, keyInfo.pressCnt);
+		}
+	}
+
+	if (keyInfo.keyStatus == KEY_PRESSED) {
+		keyInfo.pressTime += pKeyCfg->timerPeriod;
+		if (keyInfo.pressTime >= 300 && lastPressTime < 300){
+			pKeyCfg->keyEventCB(KEY_PRESS_3SECS, keyInfo.pressCnt);
+		}
+	} else {
+		keyInfo.releaseTime += pKeyCfg->timerPeriod;
+		if (keyInfo.releaseTime >= pKeyCfg->pressIntervalTime && lastReleaseTime < pKeyCfg->pressIntervalTime){
+			key_scanTimerOff();
+			pKeyCfg->keyEventCB(KEY_SCAN_END, keyInfo.pressCnt);
+		}
+	}
 }
 
 ////////////////////////////////////////////key_user/////////////////////////////////////////////
@@ -80,4 +118,5 @@ void key_resetInit(void)
 	KeyCfg.pressIntervalTime = 200;
 	KeyCfg.timerPeriod = 10;
 	key_init(&KeyCfg);
+	memset(&keyInfo, 0, sizeof(KeyInfo_t));
 }
