@@ -5,6 +5,7 @@
 
 typedef enum KeyEvents {
 	KEY_PRESS = 0,      // 检测到按键按下
+	KEY_PRESS_1SECS,    // 检测到按下1秒
 	KEY_PRESS_3SECS,    // 检测到按下3秒
 	KEY_RELEASE,        // 检测到按键释放
 	KEY_SCAN_END,       // 按键检测结束（无后续连按）

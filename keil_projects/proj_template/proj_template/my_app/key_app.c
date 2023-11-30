@@ -26,7 +26,7 @@ static void key_scanTimerOff(void)
 
 static void key_scanTimerOn(uint16 time)
 {
-	key_scanTimerOff();	// 防止之前开着定时器，先尝试关
+	key_scanTimerOff();    // 防止之前开着定时器，先尝试关
 	((ke_timer_set_handler)SVC_ke_timer_set)(APP_KEY_SCAN_TIMER, TASK_APP, time);
 }
 
@@ -39,27 +39,27 @@ static void key_scan(void)
 	}
 }
 
-void key_init(KeyCfg_t* pCfg)
+void key_init(KeyCfg_t *pCfg)
 {
 	pKeyCfg = pCfg;
 }
 
 /**
  * @brief 监测首次按下
- * 
  */
 void key_monitorPress(void)
 {
 	// 如果按键周期扫描已开启，无需检测首次按下
-	if(keyInfo.taskStatus)
+	if (keyInfo.taskStatus)
 		return;
 	key_scan();
 	if (keyInfo.keyStatus == KEY_PRESSED) {
 		// 首次按下 开启扫描按键定时器
 		key_scanTimerOn(pKeyCfg->timerPeriod);
 		keyInfo.taskStatus = TRUE;
-		keyInfo.pressTime = 0;	// 按下时间清0
-		keyInfo.pressCnt = 0;	// 连按次数清0
+		keyInfo.pressTime = 0;      // 按下时间清0
+		keyInfo.releaseTime = 0;    // 释放时间清0
+		keyInfo.pressCnt = 0;       // 连按次数清0
 		pKeyCfg->keyEventCB(KEY_PRESS, keyInfo.pressCnt);
 	}
 }
@@ -75,8 +75,9 @@ void key_scanTimerCB(void)
 	uint8 lastKeyStatus = keyInfo.keyStatus;
 	uint16 lastPressTime = keyInfo.pressTime;
 	uint16 lastReleaseTime = keyInfo.releaseTime;
-	key_scan();
+	bool timerContinue = TRUE;
 
+	key_scan();
 	if (lastKeyStatus != keyInfo.keyStatus) {
 		if (keyInfo.keyStatus == KEY_PRESSED) {
 			// 检测到按下
@@ -92,31 +93,91 @@ void key_scanTimerCB(void)
 
 	if (keyInfo.keyStatus == KEY_PRESSED) {
 		keyInfo.pressTime += pKeyCfg->timerPeriod;
-		if (keyInfo.pressTime >= 300 && lastPressTime < 300){
+		if (keyInfo.pressTime >= 100 && lastPressTime < 100) {
+			pKeyCfg->keyEventCB(KEY_PRESS_1SECS, keyInfo.pressCnt);
+		} else if (keyInfo.pressTime >= 300 && lastPressTime < 300) {
 			pKeyCfg->keyEventCB(KEY_PRESS_3SECS, keyInfo.pressCnt);
 		}
 	} else {
 		keyInfo.releaseTime += pKeyCfg->timerPeriod;
-		if (keyInfo.releaseTime >= pKeyCfg->pressIntervalTime && lastReleaseTime < pKeyCfg->pressIntervalTime){
-			key_scanTimerOff();
+		if (keyInfo.releaseTime >= pKeyCfg->pressIntervalTime && lastReleaseTime < pKeyCfg->pressIntervalTime) {
+			timerContinue = FALSE;
 			pKeyCfg->keyEventCB(KEY_SCAN_END, keyInfo.pressCnt);
 		}
+	}
+
+	if (timerContinue) {
+		key_scanTimerOn(pKeyCfg->timerPeriod);
+	} else {
+		key_scanTimerOff();
 	}
 }
 
 ////////////////////////////////////////////key_user/////////////////////////////////////////////
-static KeyCfg_t KeyCfg;
+typedef enum KeyUserFlag {
+	KEY_NO_FLAG = 0,
+	KEY_POWER_ON_FLAG,
+	KEY_3SECS_UNLOCK_FLAG,
+	KEY_POWER_OFF_FLAG,
+} KeyUserFlag_t;
 
-void key_EventCB(KeyEvents_t event, uint8 pressCnt)
+typedef struct KeyUserInfo {
+	uint8 runMode;    // 0:关机 1:开机
+	KeyUserFlag_t flag;
+} KeyUserInfo_t;
+
+static KeyUserInfo_t keyUserInfo;
+static KeyCfg_t keyCfg;
+
+void key_eventCB(KeyEvents_t event, uint8 pressCnt)
 {
-	;
+	if (event == KEY_PRESSED && pressCnt == 0) {
+		// 首次按下清标志位
+		keyUserInfo.flag = KEY_NO_FLAG;
+	}
+
+	if (keyUserInfo.runMode) {
+		if (event == KEY_PRESS_3SECS && pressCnt == 0) {
+			// 长按3s触发解锁按键
+			keyUserInfo.flag = KEY_3SECS_UNLOCK_FLAG;
+		} else if (event == KEY_PRESS && pressCnt == 1) {
+			if (keyUserInfo.flag == KEY_3SECS_UNLOCK_FLAG) {
+				// 解锁后再按下就让POW_EN拉低，在用户释放按键时完全断电
+				keyUserInfo.flag = KEY_POWER_OFF_FLAG;
+				mcu_gpio_en_pow(FALSE);
+			}
+		} else if (event == KEY_RELEASE) {
+			if (keyUserInfo.flag == KEY_NO_FLAG) {
+				// 未解锁按键，在释放按键时重置按键
+				key_taskReset();
+			}
+		}
+	} else {
+		if (event == KEY_PRESS_1SECS) {
+			// 长按1s开机
+			mcu_gpio_en_pow(TRUE);
+			keyUserInfo.flag = KEY_POWER_ON_FLAG;
+		} else if (event == KEY_RELEASE) {
+			if (keyUserInfo.flag == KEY_NO_FLAG) {
+				// 未长按1s在释放按键时下电
+				mcu_gpio_en_pow(FALSE);
+			}
+		} else if (event == KEY_SCAN_END) {
+			if (keyUserInfo.flag == KEY_POWER_ON_FLAG) {
+				// 等按键扫描任务结束再置runMode，防止开机后立马又被按下
+				keyUserInfo.runMode = TRUE;
+			}
+		}
+	}
 }
 
 void key_resetInit(void)
 {
-	KeyCfg.keyEventCB = key_EventCB;
-	KeyCfg.pressIntervalTime = 200;
-	KeyCfg.timerPeriod = 10;
-	key_init(&KeyCfg);
+	keyCfg.keyEventCB = key_eventCB;
+	keyCfg.pressIntervalTime = 200;
+	keyCfg.timerPeriod = 10;
+	key_init(&keyCfg);
 	memset(&keyInfo, 0, sizeof(KeyInfo_t));
+
+	memset(&keyUserInfo, 0, sizeof(KeyUserInfo_t));
 }
