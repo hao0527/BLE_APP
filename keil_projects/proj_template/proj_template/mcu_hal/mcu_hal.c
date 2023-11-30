@@ -20,7 +20,7 @@ void mcu_gpio_user_init(void)
 	GPIO_ENABLE_DIGITAL_PATH(P1, BIT4);
 	SYS->P1_MFP &= ~(SYS_MFP_P14_Msk);
 	SYS->P1_MFP |= SYS_MFP_P14_GPIO;
-	GPIO_SetMode(P1, BIT4, GPIO_MODE_OUTPUT);
+	GPIO_SetMode(P1, BIT4, GPIO_MODE_OUTPUT);	// 需低功耗io保持
 //	GPIO_InitOutput(P1, BIT4, GPIO_HIGH_LEVEL);	// 需注意：原本库的GPIO_HIGH_LEVEL有误，正确应该是 GPIO_HIGH_LEVEL=1
 //	GPIO_SetBits(P1, BIT4);	// led 默认不亮
 
@@ -28,7 +28,8 @@ void mcu_gpio_user_init(void)
 	GPIO_ENABLE_DIGITAL_PATH(P1, BIT5);
 	SYS->P1_MFP &= ~(SYS_MFP_P15_Msk);
 	SYS->P1_MFP |= SYS_MFP_P15_GPIO;
-	GPIO_InitOutput(P1, BIT5, GPIO_HIGH_LEVEL);	// P15 是 POW_EN 上电后要一直拉高，关机时拉低
+	GPIO_SetMode(P1, BIT5, GPIO_MODE_OUTPUT);	// 需低功耗io保持
+	// GPIO_InitOutput(P1, BIT5, GPIO_HIGH_LEVEL);	// P15 是 POW_EN 开机后要一直拉高，关机时拉低
 
 	GPIO_PullUp(P3, BIT0, GPIO_PULLUP_DISABLE);	// 外部下拉，关闭内部上拉防止漏电流
 	GPIO_ENABLE_DIGITAL_PATH(P3, BIT0);
