@@ -22,12 +22,14 @@ static void key_scanTimerOff(void)
 	if (((ke_timer_active_handler)SVC_ke_timer_active)(APP_KEY_SCAN_TIMER, TASK_APP)) {
 		((ke_timer_clear_handler)SVC_ke_timer_clear)(APP_KEY_SCAN_TIMER, TASK_APP);
 	}
+	keyInfo.taskStatus = FALSE;
 }
 
 static void key_scanTimerOn(uint16 time)
 {
 	key_scanTimerOff();    // 防止之前开着定时器，先尝试关
 	((ke_timer_set_handler)SVC_ke_timer_set)(APP_KEY_SCAN_TIMER, TASK_APP, time);
+	keyInfo.taskStatus = TRUE;
 }
 
 static void key_scan(void)
@@ -56,7 +58,6 @@ void key_monitorPress(void)
 	if (keyInfo.keyStatus == KEY_PRESSED) {
 		// 首次按下 开启扫描按键定时器
 		key_scanTimerOn(pKeyCfg->timerPeriod);
-		keyInfo.taskStatus = TRUE;
 		keyInfo.pressTime = 0;      // 按下时间清0
 		keyInfo.releaseTime = 0;    // 释放时间清0
 		keyInfo.pressCnt = 0;       // 连按次数清0
