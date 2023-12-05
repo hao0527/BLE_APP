@@ -13,6 +13,8 @@
 #define PRECISION_TEMPER_VALUE_C	0.05f
 // TemperValue 转 真实温度 （摄氏度）
 #define TEMPER_VALUE_TO_C(value)	(ZERO_TEMPER_VALUE_C + PRECISION_TEMPER_VALUE_C * value)
+// 是否开启Vref校准adc采集温度
+#define ADC_VREF_CALIBRATION_EN 	(0)
 
 #pragma pack(1)
 typedef struct TemperCfg

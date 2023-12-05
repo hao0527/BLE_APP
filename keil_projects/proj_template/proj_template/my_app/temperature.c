@@ -112,9 +112,11 @@ void temper_sampleTemperTimerCb(void)
 	mcu_adc_user_init();
 	while(!mcu_adc_main());	// 阻塞到采样完成
 	mcu_gpio_en_ldo(FALSE);
-	vref = mcu_adc_get_voltage(MCU_P13_ADC_CH3);
 	v = mcu_adc_get_voltage(MCU_P12_ADC_CH2);
+#if ADC_VREF_CALIBRATION_EN
+	vref = mcu_adc_get_voltage(MCU_P13_ADC_CH3);
 	v = v * VREF_VOLTAGE / vref;	// 校准温漂后的v
+#endif
 	t = adcVoltageToTemperValue(v);
 	saveTemperValue(t);
 }
@@ -124,7 +126,7 @@ void temper_sampleTemperTimerCb(void)
  */
 int8 temper_sampleTemper(void)
 {
-	float v;
+	float v, vref;
 	int8 t;
 
 	mcu_gpio_en_ldo(TRUE);
@@ -132,6 +134,10 @@ int8 temper_sampleTemper(void)
 	while(!mcu_adc_main());	// 阻塞到采样完成
 	mcu_gpio_en_ldo(FALSE);
 	v = mcu_adc_get_voltage(MCU_P12_ADC_CH2);
+#if ADC_VREF_CALIBRATION_EN
+	vref = mcu_adc_get_voltage(MCU_P13_ADC_CH3);
+	v = v * VREF_VOLTAGE / vref;	// 校准温漂后的v
+#endif
 	t = adcVoltageToTemperValue(v);
 	return t;
 }
