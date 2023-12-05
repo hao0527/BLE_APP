@@ -14,7 +14,7 @@ void mcu_gpio_user_init(void)
 	SYS->P1_MFP &= ~(SYS_MFP_P10_Msk);
 	SYS->P1_MFP |= SYS_MFP_P10_GPIO;
 	GPIO_InitOutput(P1, BIT0, GPIO_LOW_LEVEL);	// 需注意：原本库的GPIO_LOW_LEVEL有误，正确应该是 GPIO_LOW_LEVEL=0
-	GPIO_ClearBits(P1, BIT0);	// ldo 默认不开
+	P10 = 0;	// ldo 默认不开
 
 	GPIO_PullUp(P1, BIT4, GPIO_PULLUP_ENABLE);
 	GPIO_ENABLE_DIGITAL_PATH(P1, BIT4);
@@ -22,7 +22,7 @@ void mcu_gpio_user_init(void)
 	SYS->P1_MFP |= SYS_MFP_P14_GPIO;
 	GPIO_SetMode(P1, BIT4, GPIO_MODE_OUTPUT);	// 需低功耗io保持
 //	GPIO_InitOutput(P1, BIT4, GPIO_HIGH_LEVEL);	// 需注意：原本库的GPIO_HIGH_LEVEL有误，正确应该是 GPIO_HIGH_LEVEL=1
-//	GPIO_SetBits(P1, BIT4);	// led 默认不亮
+//	P14 = 1;	// led 默认不亮
 
 	GPIO_PullUp(P1, BIT5, GPIO_PULLUP_ENABLE);
 	GPIO_ENABLE_DIGITAL_PATH(P1, BIT5);
@@ -41,25 +41,26 @@ void mcu_gpio_user_init(void)
 void mcu_gpio_en_ldo(bool en)
 {
 	if(en)
-		GPIO_SetBits(P1, BIT0);		// ldo en 拉高
+		P10 = 1;	// ldo en 拉高
 	else
-		GPIO_ClearBits(P1, BIT0);	// ldo en 拉低
+		P10 = 0;	// ldo en 拉低
 }
 
 void mcu_gpio_light_led(bool light)
 {
+	// 注意：使用P14宏操作Pxn_PDIO寄存器低功耗IO保持才可以，使用GPIO_SetBits()和GPIO_ClearBits()接口操作DOUT寄存器会导致低功耗IO保持异常
 	if(light)
-		GPIO_ClearBits(P1, BIT4);	// led 亮
+		P14 = 0;	// led 亮
 	else
-		GPIO_SetBits(P1, BIT4);		// led 灭
+		P14 = 1;	// led 灭
 }
 
 void mcu_gpio_en_pow(bool en)
 {
 	if(en)
-		GPIO_SetBits(P1, BIT5);		// POW_EN 拉高保持供电
+		P15 = 1;	// POW_EN 拉高保持供电
 	else
-		GPIO_ClearBits(P1, BIT5);	// POW_EN 拉低下电
+		P15 = 0;	// POW_EN 拉低下电
 }
 
 bool mcu_gpio_key_pressed(void)
