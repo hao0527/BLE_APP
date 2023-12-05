@@ -135,9 +135,10 @@ void hci_uart_init ( void )
 
     UART_InitTypeDef Init_Struct;
 
-    /* Set P1 multi-function pins for UART1 RXD, TXD */
-    SYS->P1_MFP |= SYS_MFP_P14_UART1_RXD | SYS_MFP_P15_UART1_TXD; 
-	GPIO_ENABLE_DIGITAL_PATH ( P1, (1<<4) );
+    /* Set P2 multi-function pins for UART1 RXD, TXD */
+    SYS->P2_MFP |= SYS_MFP_P24_UART1_RXD | SYS_MFP_P25_UART1_TXD; 
+	GPIO_ENABLE_DIGITAL_PATH ( P2, (1<<4) );
+	GPIO_ENABLE_DIGITAL_PATH ( P2, (1<<5) );
 	CLK_EnableModuleClock ( UART1_MODULE ); 
     
     /* Init UART to 115200-8n1 for print message */
