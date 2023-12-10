@@ -127,7 +127,7 @@ typedef struct KeyUserInfo {
 	KeyUserFlag_t flag;
 } KeyUserInfo_t;
 
-static KeyUserInfo_t keyUserInfo;
+KeyUserInfo_t keyUserInfo;
 static KeyCfg_t keyCfg;
 
 void key_eventCB(KeyEvents_t event, uint8 pressCnt)
