@@ -100,7 +100,7 @@ uint16 temper_getTemperCnt(void)
  */
 void temper_sampleTemperTimerCb(void)
 {
-	float v, vref;
+	float v;
 	int8 t;
 	
 	if(++temperTimerCnt >= SAMPLE_TEMPER_PERIOD)
@@ -114,6 +114,7 @@ void temper_sampleTemperTimerCb(void)
 	mcu_gpio_en_ldo(FALSE);
 	v = mcu_adc_get_voltage(MCU_P12_ADC_CH2);
 #if ADC_VREF_CALIBRATION_EN
+	float vref;
 	vref = mcu_adc_get_voltage(MCU_P13_ADC_CH3);
 	v = v * VREF_VOLTAGE / vref;	// 校准温漂后的v
 #endif
@@ -126,7 +127,7 @@ void temper_sampleTemperTimerCb(void)
  */
 int8 temper_sampleTemper(void)
 {
-	float v, vref;
+	float v;
 	int8 t;
 
 	mcu_gpio_en_ldo(TRUE);
@@ -135,6 +136,7 @@ int8 temper_sampleTemper(void)
 	mcu_gpio_en_ldo(FALSE);
 	v = mcu_adc_get_voltage(MCU_P12_ADC_CH2);
 #if ADC_VREF_CALIBRATION_EN
+	float vref;
 	vref = mcu_adc_get_voltage(MCU_P13_ADC_CH3);
 	v = v * VREF_VOLTAGE / vref;	// 校准温漂后的v
 #endif
