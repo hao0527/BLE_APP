@@ -72,6 +72,10 @@
 #include "app_task.h"
 #include "stack_svc_api.h"
 
+#if PROJ_TEMPER
+#include "led_app.h"
+#endif
+
 #define Conn_Param_Update           1
 #define DBG_APP_PROJ_EVENT(x)       //printf x
 
@@ -223,6 +227,14 @@ void app_connection_req_ind_func ( uint8_t conidx, struct gapc_connection_req_in
 	#endif
     sys_ble_conn_flag = 1;
     
+	#if PROJ_TEMPER
+	if(ble_has_been_connected == FALSE)
+	{
+		ble_has_been_connected = TRUE;	// 已被连接过
+		led_setMode(LED_MODE_OFF);
+	}
+	#endif
+
     return;
 }
 

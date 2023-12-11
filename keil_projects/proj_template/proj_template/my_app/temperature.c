@@ -27,8 +27,8 @@ static void saveTemperValue(int8 value)
 	temperCnt++;
 }
 
-#define TEMPER_VALUE_MAX_CFG 100
-#define TEMPER_VALUE_MIN_CFG -100
+#define TEMPER_VALUE_MAX_CFG 120
+#define TEMPER_VALUE_MIN_CFG -120
 #define TEMPER_VALUE_OVER_MAX 127
 #define TEMPER_VALUE_LESS_MIN -128
 /**
@@ -93,6 +93,7 @@ uint16 temper_getTemperCnt(void)
 	return temperCnt;
 }
 
+#define VREF_VOLTAGE 1.25	/*有一个adc通道采集一个参考电压，用于校准温漂导致的adc误差*/
 /**
  * @brief 每调用SAMPLE_TEMPER_PERIOD次，阻塞采一次温度，后存储
  * @note 定时器回调每1min调一次此接口
@@ -107,12 +108,16 @@ void temper_sampleTemperTimerCb(void)
 	else
 		return;
 	
-	mcu_gpio_user_init();
 	mcu_gpio_en_ldo(TRUE);
 	mcu_adc_user_init();
 	while(!mcu_adc_main());	// 阻塞到采样完成
 	mcu_gpio_en_ldo(FALSE);
 	v = mcu_adc_get_voltage(MCU_P12_ADC_CH2);
+#if ADC_VREF_CALIBRATION_EN
+	float vref;
+	vref = mcu_adc_get_voltage(MCU_P13_ADC_CH3);
+	v = v * VREF_VOLTAGE / vref;	// 校准温漂后的v
+#endif
 	t = adcVoltageToTemperValue(v);
 	saveTemperValue(t);
 }
@@ -125,12 +130,16 @@ int8 temper_sampleTemper(void)
 	float v;
 	int8 t;
 
-	mcu_gpio_user_init();
 	mcu_gpio_en_ldo(TRUE);
 	mcu_adc_user_init();
 	while(!mcu_adc_main());	// 阻塞到采样完成
 	mcu_gpio_en_ldo(FALSE);
 	v = mcu_adc_get_voltage(MCU_P12_ADC_CH2);
+#if ADC_VREF_CALIBRATION_EN
+	float vref;
+	vref = mcu_adc_get_voltage(MCU_P13_ADC_CH3);
+	v = v * VREF_VOLTAGE / vref;	// 校准温漂后的v
+#endif
 	t = adcVoltageToTemperValue(v);
 	return t;
 }

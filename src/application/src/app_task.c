@@ -153,6 +153,12 @@ int app_conn_update_handler(ke_msg_id_t const msgid,
 		conn_param.intv_max = 80;
 		conn_param.latency	= 0;
 		conn_param.time_out = 600;
+        #if(PROJ_TEMPER)
+        conn_param.intv_min = 96;
+        conn_param.intv_max = 96;
+        conn_param.latency	= 2;
+        conn_param.time_out = 600;
+        #endif  // PROJ_TEMPER
 		appm_update_param(&conn_param);
 		#elif(PROJ_MULTIROLE)
 		struct gapc_conn_param conn_param;

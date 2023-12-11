@@ -319,7 +319,7 @@
             <OneElfS>1</OneElfS>
             <Strict>0</Strict>
             <EnumInt>0</EnumInt>
-            <PlainCh>0</PlainCh>
+            <PlainCh>1</PlainCh>
             <Ropi>0</Ropi>
             <Rwpi>0</Rwpi>
             <wLevel>2</wLevel>
@@ -737,6 +737,16 @@
               <FileName>temperature.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\proj_template\my_app\temperature.c</FilePath>
+            </File>
+            <File>
+              <FileName>led_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\proj_template\my_app\led_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>key_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\proj_template\my_app\key_app.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2166,6 +2176,16 @@
               <FileName>temperature.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\proj_template\my_app\temperature.c</FilePath>
+            </File>
+            <File>
+              <FileName>led_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\proj_template\my_app\led_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>key_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\proj_template\my_app\key_app.c</FilePath>
             </File>
           </Files>
         </Group>

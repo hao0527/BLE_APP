@@ -16,6 +16,8 @@
 #include "dbg_sys.h"
 #include "stack_svc_api.h"
 
+#include "mcu_hal.h"
+
 /*---------------------------------------------------------------------------------------------------------*/
 /* Global variables                                                                                        */
 #if(EXT_WAKEUP)
@@ -24,6 +26,7 @@ uint8_t wakeup_cnt;				//休眠唤醒的计数，unit，连接间隔或广播间隔。
 uint8_t sys_power_flag;			//为1,关闭32k,系统完全休眠。为其他，不关闭
 uint8_t sys_sleep_flag;			//为1,系统进入低功耗。为0，系统唤醒。
 uint8_t sys_ble_conn_flag;      //1,connect;0,disconnect
+bool ble_has_been_connected;		// TRUE: 已被连接过 FALSE: 未被连接过
 uint16_t USART_RX_CNT;
 uint8_t  USART_RX_BUF[USART_REC_LEN];
 
@@ -37,9 +40,27 @@ app_var_t app_var __attribute__((at(APP_VAR_ADDR)));
 typedef void (FUNC_PTR)(void);
 #endif
 
- 
+//PANCHIP MAC
+#define MAC0_ADDR 0x400050
+#define MAC1_ADDR 0x400054
+
+//FT MAC
+//#define MAC0_ADDR 0x400058
+//#define MAC1_ADDR 0x40005c 
+
+void FMC_ReadRom(uint32_t u32Addr, uint8_t *rom_data)
+{
+	SYS_UnlockReg();
+	FMC_ENABLE_ISP();
+	uint32_t data;
+	data = (FMC_Read(u32Addr));
+	memcpy(rom_data, &data, sizeof(uint32_t));
+	SYS_LockReg();
+}
+
 void Set_Device_MacAddr(void)
 {
+/*
 	uint8_t addrvalue[6] = {0};
 	
 	SYS_UnlockReg();
@@ -63,8 +84,13 @@ void Set_Device_MacAddr(void)
 	FMC_Close();
 	SYS_LockReg();
 	memcpy(app_var.co_default_bdaddr.addr,addrvalue,BD_ADDR_LEN);
+*/
+	uint8_t addrvalue[8];
+	FMC_ReadRom(MAC0_ADDR, addrvalue);
+	FMC_ReadRom(MAC1_ADDR, addrvalue + 4);
+	memcpy(app_var.co_default_bdaddr.addr, addrvalue, BD_ADDR_LEN);
 } 
- 
+
 void UART0_Handler(void)
 {
 	uint32_t u32IntSts=UART_GetActiveEvent(UART0);
@@ -122,6 +148,7 @@ void sys_clear_global_var(void)
 	sys_power_flag = 0;
 	sys_sleep_flag = 0;
 	sys_ble_conn_flag = 0;
+	ble_has_been_connected = FALSE;
 	app_var.Wakeup_int = 0;
 	app_var.rf_close_en = RF_CLOSE_EN;	
 	app_var.Gpio_retain_en = GPIO_RETAIN_EN;

@@ -42,6 +42,10 @@
 #include "ota_server.h"
 #endif
 
+#include "mcu_hal.h"
+#include "led_app.h"
+#include "key_app.h"
+
 const app_info_t app_info __attribute__((at(APP_INFO_ADDR)))=
 {
 	.co_default_bdname = "proj_template",
@@ -56,6 +60,8 @@ const app_info_t app_info __attribute__((at(APP_INFO_ADDR)))=
 void ble_sleep_wakeup_init()
 {
 	periph_init();																//System peripheral initialization
+	/* 注意：mcu_gpio_user_init()放在periph_init()内部的最后一行io保持不可以，放在periph_init()执行完出来的下一行才行！*/
+	mcu_gpio_user_init();	// 初始化gpio
 	
 	GLOBAL_INT_STOP();
 	
@@ -88,6 +94,9 @@ void ble_normal_reset_init()
 {
 	sys_clear_global_var();
 	periph_init();
+	/* 注意：mcu_gpio_user_init()放在periph_init()内部的最后一行io保持不可以，放在periph_init()执行完出来的下一行才行！*/
+	mcu_gpio_user_init();	// 初始化gpio
+	mcu_gpio_en_pow(FALSE);	// 首次复位拉低POW_EN，需要长按1s后开机
 	
 	printf("CPU @ %dHz,%s\n", SystemCoreClock, app_info.co_default_bdname);
 	#if(PROJ_OTA)
@@ -130,6 +139,7 @@ void ble_stack_process()
 		#endif
 		((bleip_schedule_handler)SVC_bleip_schedule)();
 		((rc_check_period_calib_handler)SVC_rc_check_period_calib)();
+		key_monitorPress();
 		
 		#if(TEMP_CHANGE_CALIB)
 		rf_calibration_process();
@@ -137,6 +147,9 @@ void ble_stack_process()
 		
 		if (app_var.default_sleep_en)
 		{
+			#if (GPIO_RETAIN_EN)
+			GPIO_Store();
+			#endif
 			GLOBAL_INT_DISABLE();
 			
 			// Check if the processor clock can be gated
@@ -178,6 +191,9 @@ void ble_init(void)
 
 int main(void)
 {
+#if (GPIO_RETAIN_EN)
+	GPIO_Retract();
+#endif
 	stack_sp_restore();
 	ble_init();
 	ble_stack_process();

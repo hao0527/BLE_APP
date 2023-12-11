@@ -368,8 +368,8 @@ typedef enum
 
 typedef enum
 {
-    GPIO_HIGH_LEVEL = 0x00,
-    GPIO_LOW_LEVEL  = 0x01,
+    GPIO_LOW_LEVEL = 0x00,
+    GPIO_HIGH_LEVEL  = 0x01,
 } GPIO_VALUE_T;
 void GPIO_SetMode(GPIO_T *gpio, uint32_t u32PinMask, uint32_t u32Mode);
 void GPIO_EnableInt(GPIO_T *gpio, uint32_t u32Pin, uint32_t u32IntAttribs);
@@ -387,6 +387,9 @@ static inline void GPIO_ClearBits(GPIO_T* GPIOx, uint32_t GPIO_Pin)
     GPIOx->DOUT &= ~GPIO_Pin;
 }
 
+
+extern void GPIO_Store ( void );
+extern void GPIO_Retract ( void );
 
 /*@}*/ /* end of group PN102_GPIO_EXPORTED_FUNCTIONS */
 

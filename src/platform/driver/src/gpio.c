@@ -169,6 +169,24 @@ void GPIO_PullUp(GPIO_T *gpio, uint32_t u32PinMask, uint8_t u8Mode)
     }
 }
 
+#include <string.h>
+uint8_t m_gpio_status = 0;
+GPIO_T  m_gpios;
+
+void GPIO_Store ( void )
+{
+    m_gpio_status = 1;
+    memcpy ( &m_gpios, P1, sizeof(GPIO_T) );
+}
+
+void GPIO_Retract ( void )
+{
+    if ( 0 == m_gpio_status )
+    {
+        return;
+    }
+    memcpy ( P1, &m_gpios, sizeof(GPIO_T) );
+}
 
 /*@}*/ /* end of group PN102_GPIO_EXPORTED_FUNCTIONS */
 

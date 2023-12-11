@@ -23,6 +23,8 @@
 #include "stack_svc_api.h"
 
 #include "temperature.h"
+#include "led_app.h"
+#include "key_app.h"
 
 static struct app_proj_template_env_tag app_proj_template_env;
 void app_proj_template_init(void)
@@ -35,6 +37,9 @@ void app_proj_template_init(void)
 			设置定时器放在appm_init()内部没问题，但是放在appm_init()外部就不行，
 			甚至把设置定时器放在appm_init()内部的最后一行可以，放在appm_init()执行完出来的下一行不行！*/
 	((ke_timer_set_handler)SVC_ke_timer_set)(APP_SAMPLE_TEMPER_TIMER, TASK_APP, 60*100);
+
+	led_resetInit();
+	key_resetInit();
 }
 
 
@@ -154,6 +159,24 @@ static int app_sample_temper_handler(ke_msg_id_t const msgid,
 	return (KE_MSG_CONSUMED);
 }
 
+static int app_led_blink_handler(ke_msg_id_t const msgid,
+                                     void const *param,
+                                     ke_task_id_t const dest_id,
+                                     ke_task_id_t const src_id)
+{
+	led_ledBlinkTimerCb();
+	return (KE_MSG_CONSUMED);
+}
+
+static int app_key_scan_handler(ke_msg_id_t const msgid,
+                                     void const *param,
+                                     ke_task_id_t const dest_id,
+                                     ke_task_id_t const src_id)
+{
+	key_scanTimerCB();
+	return (KE_MSG_CONSUMED);
+}
+
 /// Default State handlers definition
 const struct ke_msg_handler app_proj_template_msg_handler_list[] =
 {
@@ -162,6 +185,8 @@ const struct ke_msg_handler app_proj_template_msg_handler_list[] =
 	{PROJ_TEMPLATE_SERVER_PEER_WRITE_DATA_IND,   (ke_msg_func_t)proj_template_server_peer_write_data_ind_handler},
 	{PROJ_TEMPLATE_SERVER_ENABLE_RSP,       (ke_msg_func_t)proj_template_server_enable_rsp_handler},
 	{APP_SAMPLE_TEMPER_TIMER,	(ke_msg_func_t)app_sample_temper_handler},
+	{APP_LED_BLINK_TIMER,		(ke_msg_func_t)app_led_blink_handler},
+	{APP_KEY_SCAN_TIMER,		(ke_msg_func_t)app_key_scan_handler},
 };
 
 const struct ke_state_handler app_proj_template_table_handler =
