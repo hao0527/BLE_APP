@@ -40,20 +40,20 @@ app_var_t app_var __attribute__((at(APP_VAR_ADDR)));
 typedef void (FUNC_PTR)(void);
 #endif
 
-//PANCHIP MAC
-#define MAC0_ADDR 0x400050
-#define MAC1_ADDR 0x400054
+//PANCHIP MAC (量产烧录mac)
+//#define MAC0_ADDR 0x400050
+//#define MAC1_ADDR 0x400054
 
-//FT MAC
-//#define MAC0_ADDR 0x400058
-//#define MAC1_ADDR 0x40005c 
+//FT MAC (芯片出厂mac)
+#define MAC0_ADDR 0x400058
+#define MAC1_ADDR 0x40005c
 
 void FMC_ReadRom(uint32_t u32Addr, uint8_t *rom_data)
 {
 	SYS_UnlockReg();
 	FMC_ENABLE_ISP();
 	uint32_t data;
-	data = (FMC_Read(u32Addr));
+	data = (FMC_ReadUID(u32Addr));
 	memcpy(rom_data, &data, sizeof(uint32_t));
 	SYS_LockReg();
 }
